@@ -7,8 +7,8 @@
     <ProjectGuid>{06C33236-3E25-42B0-B5F4-E22BC46B4E7C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VCR</RootNamespace>
-    <AssemblyName>VanillaCombatReloaded</AssemblyName>
+    <RootNamespace>VAR</RootNamespace>
+    <AssemblyName>VanillaAmmoReloaded</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -42,7 +42,7 @@
     <Compile Include="DamageWorker_Arrow.cs" />
     <Compile Include="DamageWorker_Bullet.cs" />
     <Compile Include="SettingsHelper.cs" />
-    <Compile Include="VCR.cs" />
+    <Compile Include="VAR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

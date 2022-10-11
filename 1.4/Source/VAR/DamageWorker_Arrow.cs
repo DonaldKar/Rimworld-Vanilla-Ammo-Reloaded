@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace VCR
+namespace VAR
 {
     public class DamageWorker_Arrow : DamageWorker_AddInjury
     {

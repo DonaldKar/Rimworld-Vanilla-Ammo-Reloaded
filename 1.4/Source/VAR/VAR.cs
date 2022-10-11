@@ -14,12 +14,12 @@ using MonoMod.Utils;
 using Verse.Sound;
 using System.Xml;
 
-namespace VCR
+namespace VAR
 {
     [StaticConstructorOnStartup]
-    public static class VCR
+    public static class VAR
     {
-        static VCR()
+        static VAR()
         {
 
             //Harmony.DEBUG = true;
@@ -70,7 +70,7 @@ namespace VCR
         public override void WriteSettings()
         {
             base.WriteSettings();
-            VCR.ApplySettings();
+            VAR.ApplySettings();
         }
     }
     public class VanillaCombatSettings : ModSettings
@@ -155,7 +155,7 @@ namespace VCR
 
         protected override bool ApplyWorker(XmlDocument xml)
         {
-            if (VCR.XmlSettings.Contains(setting))
+            if (VAR.XmlSettings.Contains(setting))
             {
                 if (match != null)
                 {

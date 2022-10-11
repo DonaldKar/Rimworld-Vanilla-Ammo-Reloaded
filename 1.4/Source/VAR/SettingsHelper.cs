@@ -6,7 +6,7 @@ using Verse;
 using Verse.Sound;
 using static Verse.Widgets;
 
-namespace VCR
+namespace VAR
 {
     internal static class SettingsHelper
     {
