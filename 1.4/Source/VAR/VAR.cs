@@ -65,7 +65,6 @@ namespace VAR
                 }
             }
         }
-        }
 
         [HarmonyPatch(typeof(Verb_LaunchProjectile), "Projectile")]
         public static class Verb_LaunchProjectile_Projectile_Patch
