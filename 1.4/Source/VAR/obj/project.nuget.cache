@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "tC3jz4uIe3ESOsjE1IMbxHjNLAiJXRx1LSwSmYLtqb9PpbN+F8XyAfCgYHX2zGukTx9nfvkjExZGP2JGl6trVA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\karasd3\\.nuget\\packages\\krafs.rimworld.ref\\1.4.3514-beta\\krafs.rimworld.ref.1.4.3514-beta.nupkg.sha512",
+    "C:\\Users\\karasd3\\.nuget\\packages\\lib.harmony\\2.2.2\\lib.harmony.2.2.2.nupkg.sha512"
+  ],
+  "logs": []
+}
