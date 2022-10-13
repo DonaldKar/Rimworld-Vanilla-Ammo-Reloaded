@@ -24,22 +24,22 @@ namespace VAR
             //Harmony.DEBUG = true;
             new Harmony("VAR.Mod").PatchAll();
         }
-        [HarmonyPatch(typeof(Projectile), "DamageAmount")]
+        [HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
         public static class Projectile_DamageAmount_Patch
         {
             public static void Postfix(ref Projectile __instance, ref int __result)
             {
-                float damage = __result * (__instance.def.GetModExtension<CustomProjectile>()?.damagemultiplier ?? 1f) ;
+                float damage = __result * (__instance.def.GetModExtension<CustomProjectile>()?.damageMultiplier ?? 1f) ;
                 __result = (int)damage;
                 return;
             }
         }
-        [HarmonyPatch(typeof(Projectile), "ArmorPenetration")]
+        [HarmonyPatch(typeof(Projectile), "ArmorPenetration", MethodType.Getter)]
         public static class Projectile_ArmorPenetration_Patch
         {
             public static void Postfix(ref Projectile __instance, ref float __result)
             {
-                __result *= __instance.def.GetModExtension<CustomProjectile>()?.apmultiplier ?? 1f;
+                __result *= __instance.def.GetModExtension<CustomProjectile>()?.apMultiplier ?? 1f;
                 return;
             }
         }
@@ -66,7 +66,7 @@ namespace VAR
             }
         }
 
-        [HarmonyPatch(typeof(Verb_LaunchProjectile), "Projectile")]
+        [HarmonyPatch(typeof(Verb_LaunchProjectile), "Projectile", MethodType.Getter)]
         public static class Verb_LaunchProjectile_Projectile_Patch
         {
             public static void Postfix(ref Verb __instance, ref ThingDef __result)
@@ -87,9 +87,9 @@ namespace VAR
 
         public class CustomProjectile : DefModExtension
         {
-            public float damagemultiplier;
-            public float apmultiplier;
-            public List<ExtraDamage> extraDamages;
+            public float damageMultiplier = 1f;
+            public float apMultiplier = 1f;
+            public List<ExtraDamage> extraDamages = new List<ExtraDamage>();
         }
     }
 }
