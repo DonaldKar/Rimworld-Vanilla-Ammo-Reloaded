@@ -7,5 +7,30 @@
 			<li Class="CompProperties_ChangeableProjectile"/>
 		</value>
 	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[@Name="BaseWeaponNeolithic" or @Name="BaseGun"]</xpath>
+		<value>
+			<building>
+				<fixedStorageSettings>
+					<filter>
+						<categories>
+							<li>MortarShells</li>
+						</categories>
+					</filter>
+				</fixedStorageSettings>
+				<defaultStorageSettings>
+					<filter>
+						<categories>
+							<li>MortarShells</li>
+						</categories>
+						<disallowedThingDefs>
+							<li>Shell_Firefoam</li>
+							<li>Shell_AntigrainWarhead</li>
+						</disallowedThingDefs>
+					</filter>
+				</defaultStorageSettings>
+			</building>
+		</value>
+	</Operation>
 	
 </Patch>
