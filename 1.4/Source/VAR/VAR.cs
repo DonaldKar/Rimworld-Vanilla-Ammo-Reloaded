@@ -13,6 +13,9 @@ using Verse.AI.Group;
 using MonoMod.Utils;
 using Verse.Sound;
 using System.Xml;
+using MVCF.Reloading.Comps;
+using MVCF.VerbComps;
+using MVCF.Comps;
 
 namespace VAR
 {
@@ -113,8 +116,8 @@ namespace VAR
             }
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                MethodBase from = AccessTools.PropertyGetter(typeof(ProjectileProperties), "damageDef");
-                MethodBase from2 = AccessTools.PropertyGetter(typeof(ExtraDamage), "amount");
+                FieldInfo from = AccessTools.Field(typeof(ProjectileProperties), "damageDef");
+                FieldInfo from2 = AccessTools.Field(typeof(ExtraDamage), "amount");
                 MethodBase from3 = AccessTools.Method(typeof(ExtraDamage), "AdjustedArmorPenetration");
 
                 MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "assignDef");
@@ -123,17 +126,19 @@ namespace VAR
 
                 foreach (CodeInstruction instruction in instructions)
                 {
-                    if (instruction.operand as MethodBase == from)
+                    if (instruction.operand as FieldInfo == from)
                     {
                         yield return instruction;
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
                         yield return new CodeInstruction(OpCodes.Call, to);
                         continue;
                     }
-                    if (instruction.operand as MethodBase == from2)
+                    if (instruction.operand as FieldInfo == from2)
                     {
                         yield return instruction;
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
                         yield return new CodeInstruction(OpCodes.Call, to2);
                         continue;
                     }
@@ -141,6 +146,7 @@ namespace VAR
                     {
                         yield return instruction;
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
                         yield return new CodeInstruction(OpCodes.Call, to3);
                         continue;
                     }
@@ -153,7 +159,7 @@ namespace VAR
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                MethodBase from = AccessTools.PropertyGetter(typeof(LogEntry_DamageResult), "AssociateWithLog");
+                MethodBase from = AccessTools.PropertyGetter(typeof(DamageWorker.DamageResult), "AssociateWithLog");
                 MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "extraDamagesBullet");
                 bool first = true;
 
@@ -254,30 +260,124 @@ namespace VAR
     {
         public CompProperties_CustomProjectile Props => (CompProperties_CustomProjectile)props;
     }
-
-
-
-
-    public class CompChangeableAmmo : CompChangeableProjectile
+    public class VerbComp_Reloadable_ChangeableAmmo_Infinite : VerbComp_Reloadable_ChangeableAmmo
     {
-        public new CompProperties_ChangeableAmmo Props => (CompProperties_ChangeableAmmo)props;
-        public override void Initialize(CompProperties props)
+        public override bool Available()
         {
-            this.props = props;
+            return true;
         }
-        public override StorageSettings GetParentStoreSettings()
+
+        public override void Initialize(VerbCompProperties props)
         {
-            return Props.fixedStorageSettings;
+            base.Initialize(props);
+            if (Props.AmmoFilter == null)
+            {
+                TechLevel tech = parent.Verb.EquipmentSource.def.techLevel;
+                Props.AmmoFilter = new ThingFilter();
+                switch (tech)
+                {
+                    case TechLevel.Neolithic:
+                        ThingCategoryDef named2 = DefDatabase<ThingCategoryDef>.GetNamed("NeolithicAmmo");
+                        if (named2 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named2, allow: true);
+                        }
+                        break;
+                    case TechLevel.Medieval:
+                        ThingCategoryDef named3 = DefDatabase<ThingCategoryDef>.GetNamed("MedievalAmmo");
+                        if (named3 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named3, allow: true);
+                        }
+                        break;
+                    case TechLevel.Industrial:
+                        ThingCategoryDef named4 = DefDatabase<ThingCategoryDef>.GetNamed("IndustrialAmmo");
+                        if (named4 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named4, allow: true);
+                        }
+                        break;
+                    case TechLevel.Spacer:
+                        ThingCategoryDef named5 = DefDatabase<ThingCategoryDef>.GetNamed("SpacerAmmo");
+                        if (named5 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named5, allow: true);
+                        }
+                        break;
+                    case TechLevel.Ultra:
+                        ThingCategoryDef named6 = DefDatabase<ThingCategoryDef>.GetNamed("UltraAmmo");
+                        if (named6 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named6, allow: true);
+                        }
+                        break;
+                    case TechLevel.Archotech:
+                        ThingCategoryDef named7 = DefDatabase<ThingCategoryDef>.GetNamed("ArchotechAmmo");
+                        if (named7 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named7, allow: true);
+                        }
+                        break;
+                    default:
+                        break;
+                }                    
+            }
+            if (Props.MaxShots == 0)
+            {
+                Props.MaxShots = (int)(6 * (parent.Verb.verbProps.burstShotCount) / (parent.Verb.verbProps.defaultProjectile?.projectile.stoppingPower ?? 0.5));
+            }
+            ShotsRemaining = Props.StartLoaded ? Props.MaxShots : 0;
         }
     }
-    public class CompProperties_ChangeableAmmo : CompProperties_ChangeableProjectile
+    [HarmonyPatch(typeof(CompProperties_VerbProps), "PropsFor")]
+    public static class VerbProps_PropsFor_Patch
     {
-
-        public CompProperties_ChangeableAmmo()
+        public static void Postfix(AdditionalVerbProps __result, Verb verb, List<AdditionalVerbProps> ___verbProps)
         {
-            compClass = typeof(CompChangeableAmmo);
+            if (__result == null)
+            {
+                __result = ___verbProps?.FirstOrDefault(prop => prop.label == "CustomVARAmmo");
+            }
         }
-
-
     }
+    //[HarmonyPatch(typeof(CompProperties_VerbProps), "PostLoadSpecial")]
+    //public static class Reloadable_TargetVerb_Patch
+    //{
+    //    public static void Prefix(ref List<AdditionalVerbProps> ___verbProps, ThingDef parent)
+    //    {
+    //        foreach (AdditionalVerbProps props in ___verbProps)
+    //        {
+    //            if (props != null && props.label == "CustomVARAmmo")
+    //            {
+    //                props.label = parent.Verbs.FirstOrDefault((VerbProperties v) => v.label != null).label;
+    //                if (props.label==null ||props.label == "CustomVARAmmo")
+    //                {
+    //                    props.label = (parent.Verbs.FirstOrDefault((VerbProperties v) => v.defaultProjectile != null).defaultProjectile.ToString());
+
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    [HarmonyPatch(typeof(VerbCompProperties), "PostLoadSpecial")]
+    public static class Reloadable_TargetVerb_Patch
+    {
+        public static void Prefix(ref List<AdditionalVerbProps> ___verbProps, ThingDef parent)
+        {
+            foreach (AdditionalVerbProps props in ___verbProps)
+            {
+                if (props != null && props.label == "CustomVARAmmo")
+                {
+                    props.label = parent.Verbs.FirstOrDefault((VerbProperties v) => v.label != null).label;
+                    if (props.label == null || props.label == "CustomVARAmmo")
+                    {
+                        props.label = (parent.Verbs.FirstOrDefault((VerbProperties v) => v.defaultProjectile != null).defaultProjectile.ToString());
+
+                    }
+                }
+            }
+        }
+    }
+
 }

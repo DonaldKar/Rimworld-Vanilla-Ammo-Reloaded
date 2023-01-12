@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Defs>
+
+	<MVCF.ModDef>
+		<defName>VanillaAmmoReloaded</defName>
+		<label>Vanilla Ammo Reloaded</label>
+		<description>Custom Ammo Mod</description>
+		<ActivateFeatures>
+			<li>AdditionalVerbProps</li>
+			<li>VerbComps</li>
+			<li>ExtraEquipmentVerrbs</li>
+			<li>Reloading</li>
+		</ActivateFeatures>
+	</MVCF.ModDef>
+
+</Defs>

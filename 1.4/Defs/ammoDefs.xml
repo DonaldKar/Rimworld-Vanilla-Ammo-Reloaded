@@ -2,7 +2,7 @@
 
 <Defs>
 
-	<ThingDef Abstract="true" Name="CustomBullet" ParentName="BaseBullet">
+	<!--<ThingDef Abstract="true" Name="CustomBullet" ParentName="BaseBullet">
 		<graphicData>
 			<texPath>Things/Projectile/Bullet_Small</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -12,12 +12,12 @@
 			<damageAmountBase>1</damageAmountBase>
 			<speed>70</speed>
 		</projectile>
-	</ThingDef>
+	</ThingDef>-->
 
 <!-- High-explosive -->
 	<ThingDef ParentName="MakeableShellBase">
 		<defName>ammo_HighExplosive</defName>
-		<label>high-explosive ammo</label>
+		<label>toxic ammo</label>
 		<description>A shell filled with high explosives. Can be fired from mortars or installed as a trap. Explodes when damaged.</description>
 		<possessionCount>1</possessionCount>
 		<graphicData>
@@ -25,15 +25,20 @@
 			<graphicClass>Graphic_StackCount</graphicClass>
 		</graphicData>
 		<comps>
-			<li Class="CompProperties_Explosive">
-				<explosiveRadius>0.9</explosiveRadius>
-				<explosiveDamageType>Bomb</explosiveDamageType>
-				<explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
-				<startWickHitPointsPercent>0.7</startWickHitPointsPercent>
-				<wickTicks>30~60</wickTicks>
+			<li Class="VAR.CompProperties_CustomProjectile">
+				<damageDef>BulletToxic</damageDef>
+				<damageMultiplier>2</damageMultiplier>
+				<apMultiplier>2</apMultiplier>
+				<extraDamages>
+					<li>
+						<def>Flame</def>
+						<amount>5</amount>
+						<armorPenetration>1</armorPenetration>
+						<chance>.5</chance>
+					</li>
+				</extraDamages>
 			</li>
 		</comps>
-		<projectileWhenLoaded>Bullet_ammo_HighExplosive</projectileWhenLoaded>
 		<costList>
 			<Steel>15</Steel>
 			<Chemfuel>15</Chemfuel>
@@ -49,7 +54,7 @@
 			<researchPrerequisite>Mortars</researchPrerequisite>
 		</recipeMaker>
 	</ThingDef>
-
+<!--
 	<ThingDef ParentName="CustomBullet">
 		<defName>Bullet_ammo_HighExplosive</defName>
 		<label>high-explosive ammo</label>
@@ -64,8 +69,8 @@
 				</extraDamages>
 			</li>
 		</modExtensions>
-	</ThingDef>
-<!-- Incendiary -->
+	</ThingDef>-->
+<!-- Incendiary --><!--
 	<ThingDef ParentName="MakeableShellBase">
 		<defName>ammo_Incendiary</defName>
 		<label>incendiary ammo</label>
@@ -115,8 +120,8 @@
 				</extraDamages>
 			</li>
 		</modExtensions>
-	</ThingDef>
-	<!-- EMP -->
+	</ThingDef>-->
+	<!-- EMP --><!--
 	<ThingDef ParentName="MakeableShellBase">
 		<defName>ammo_EMP</defName>
 		<label>EMP ammo</label>
@@ -169,6 +174,6 @@
 				</extraDamages>
 			</li>
 		</modExtensions>
-	</ThingDef>
+	</ThingDef>-->
 
 </Defs>
