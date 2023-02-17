@@ -1,21 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Donald Karasz\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj": {}
+    "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Donald Karasz\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj": {
+    "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Donald Karasz\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj",
+        "projectUniqueName": "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj",
         "projectName": "VanillaAmmoReloaded",
-        "projectPath": "C:\\Users\\Donald Karasz\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj",
-        "packagesPath": "C:\\Users\\Donald Karasz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Donald Karasz\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\obj\\",
+        "projectPath": "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj",
+        "packagesPath": "C:\\Users\\karasd3\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
-          "C:\\Users\\Donald Karasz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\karasd3\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -36,7 +36,11 @@
           "dependencies": {
             "Krafs.Rimworld.Ref": {
               "target": "Package",
+<<<<<<< Updated upstream
               "version": "[1.4.3622-beta, )"
+=======
+              "version": "[1.4.3636-beta, )"
+>>>>>>> Stashed changes
             },
             "Lib.Harmony": {
               "target": "Package",
