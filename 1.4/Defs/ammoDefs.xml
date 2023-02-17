@@ -2,8 +2,16 @@
 
 <Defs>
 
-	<!--<ThingDef Abstract="true" Name="CustomBullet" ParentName="BaseBullet">
+	<ThingDef Abstract="true" Name="CustomBullet">
+		<category>Projectile</category>
+		<tickerType>Normal</tickerType>
+		<altitudeLayer>Projectile</altitudeLayer>
+		<thingClass>Bullet</thingClass>
+		<label>bullet</label>
+		<useHitPoints>False</useHitPoints>
+		<neverMultiSelect>True</neverMultiSelect>
 		<graphicData>
+			<shaderType>Transparent</shaderType>
 			<texPath>Things/Projectile/Bullet_Small</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
@@ -12,7 +20,7 @@
 			<damageAmountBase>1</damageAmountBase>
 			<speed>70</speed>
 		</projectile>
-	</ThingDef>-->
+	</ThingDef>
 
 <!-- High-explosive -->
 	<ThingDef ParentName="MakeableShellBase">
@@ -25,7 +33,7 @@
 			<graphicClass>Graphic_StackCount</graphicClass>
 		</graphicData>
 		<comps>
-			<li Class="VAR.CompProperties_CustomProjectile">
+			<li Class="VAR.CompProperties_CustomProjectile" inherit ="false">
 				<damageDef>BulletToxic</damageDef>
 				<damageMultiplier>2</damageMultiplier>
 				<apMultiplier>2</apMultiplier>
@@ -39,6 +47,7 @@
 				</extraDamages>
 			</li>
 		</comps>
+		<projectileWhenLoaded>Bullet_ammo_HighExplosive</projectileWhenLoaded>
 		<costList>
 			<Steel>15</Steel>
 			<Chemfuel>15</Chemfuel>
@@ -54,22 +63,26 @@
 			<researchPrerequisite>Mortars</researchPrerequisite>
 		</recipeMaker>
 	</ThingDef>
-<!--
+
 	<ThingDef ParentName="CustomBullet">
 		<defName>Bullet_ammo_HighExplosive</defName>
 		<label>high-explosive ammo</label>
-		<modExtensions>
-			<li Class="VAR.CustomProjectile">
-				<damageMultiplier>1</damageMultiplier>
-				<apMultiplier>1</apMultiplier>
+		<comps>
+			<li Class="VAR.CompProperties_CustomProjectile" inherit="false">
+				<damageDef>BulletToxic</damageDef>
+				<damageMultiplier>2</damageMultiplier>
+				<apMultiplier>2</apMultiplier>
 				<extraDamages>
 					<li>
-						<damageDef>Bomb</damageDef>
+						<def>Flame</def>
+						<amount>5</amount>
+						<armorPenetration>1</armorPenetration>
+						<chance>.5</chance>
 					</li>
 				</extraDamages>
 			</li>
-		</modExtensions>
-	</ThingDef>-->
+		</comps>
+	</ThingDef>
 <!-- Incendiary --><!--
 	<ThingDef ParentName="MakeableShellBase">
 		<defName>ammo_Incendiary</defName>

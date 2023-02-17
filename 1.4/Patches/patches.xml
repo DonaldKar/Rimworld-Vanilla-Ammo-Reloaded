@@ -4,7 +4,7 @@
 	<Operation Class="PatchOperationSequence">
 		<operations>
 			<li Class="PatchOperationAdd">
-				<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]]/comps</xpath>
+				<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]or not(weaponTags)][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]]/comps</xpath>
 				<value>
 					<li Class="MVCF.Comps.CompProperties_VerbProps">
 						<compClass>MVCF.Comps.Comp_VerbProps</compClass>
@@ -22,7 +22,7 @@
 											</categories>
 										</AmmoFilter>
 										<ItemsPerShot>1</ItemsPerShot>
-										<ReloadTimePerShot>0.01</ReloadTimePerShot>
+										<ReloadTimePerShot>0.1</ReloadTimePerShot>
 										<!--<ReloadSound>ReloadWeapon</ReloadSound>-->
 									</li>
 								</comps>
@@ -32,7 +32,21 @@
 				</value>
 			</li>
 			<li Class="PatchOperationAdd">
-				<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]][not(comps)]</xpath>
+				<xpath>Defs/ThingDef[projectile]/comps</xpath>
+				<value>
+					<li Class="VAR.CompProperties_CustomProjectile" inherit ="false"/>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[projectile][not(comps)]</xpath>
+				<value>
+					<comps>
+						<li Class="VAR.CompProperties_CustomProjectile" inherit ="false"/>
+					</comps>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]or not(weaponTags)][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]][not(comps)]</xpath>
 				<value>
 					<comps>
 						<li Class="MVCF.Comps.CompProperties_VerbProps">
@@ -43,14 +57,14 @@
 									<canBeToggled>false</canBeToggled>
 									<comps>
 										<li Class="MVCF.Reloading.Comps.VerbCompProperties_Reloadable">
-											<compClass>MVCF.Reloading.Comps.VerbComp_Reloadable_ChangeableAmmo</compClass>
+											<compClass>VAR.VerbComp_Reloadable_ChangeableAmmo_Infinite</compClass>
 											<AmmoFilter>
 												<categories>
 													<li>MortarShells</li>
 												</categories>
 											</AmmoFilter>
 											<ItemsPerShot>1</ItemsPerShot>
-											<ReloadTimePerShot>0.01</ReloadTimePerShot>
+											<ReloadTimePerShot>0.1</ReloadTimePerShot>
 										</li>
 									</comps>
 								</li>

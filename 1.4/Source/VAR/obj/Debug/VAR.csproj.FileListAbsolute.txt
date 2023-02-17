@@ -1,5 +1,5 @@
 C:\Users\Donald Karasz\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Assemblies\VanillaAmmoReloaded.dll
-C:\Users\Donald Karasz\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR\obj\Debug\VAR.csproj.AssemblyReference.cache
 C:\Users\Donald Karasz\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR\obj\Debug\VAR.csproj.CoreCompileInputs.cache
 C:\Users\Donald Karasz\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR\obj\Debug\VAR.csproj.CopyComplete
 C:\Users\Donald Karasz\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR\obj\Debug\VanillaAmmoReloaded.dll
+C:\Users\Donald Karasz\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR\obj\Debug\VAR.csproj.AssemblyReference.cache
