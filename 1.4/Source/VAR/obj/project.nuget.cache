@@ -1,20 +1,11 @@
 {
   "version": 2,
-<<<<<<< Updated upstream
-  "dgSpecHash": "Y6oMEANBZEMqX4TbeSc8FMYgA1DAUKtKmqL8yfewebQ/yKsd3S2FmLrVlwS0hTRY15XSI8qrpEXds/OLz8snEg==",
-=======
-  "dgSpecHash": "rYuJr4IhbyJpellZSf8CgOq+Xkq+EeeyoTM6qmCMttfahw0EdTUiwxxTwrMD99SkoGmnD42+b1EQpG5labrLxg==",
->>>>>>> Stashed changes
+  "dgSpecHash": "Uc4HKyi2hkKTaWbf5m/DgLFKyg8EN3dJpA+acR4XIZBS6tkD+ctwaW3wZmWET4F74sByycjm75gP946+ybsY8w==",
   "success": true,
   "projectFilePath": "C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\VAR.csproj",
   "expectedPackageFiles": [
-<<<<<<< Updated upstream
-    "C:\\Users\\Donald Karasz\\.nuget\\packages\\krafs.rimworld.ref\\1.4.3622-beta\\krafs.rimworld.ref.1.4.3622-beta.nupkg.sha512",
-    "C:\\Users\\Donald Karasz\\.nuget\\packages\\lib.harmony\\2.2.2\\lib.harmony.2.2.2.nupkg.sha512"
-=======
-    "C:\\Users\\karasd3\\.nuget\\packages\\krafs.rimworld.ref\\1.4.3636-beta\\krafs.rimworld.ref.1.4.3636-beta.nupkg.sha512",
+    "C:\\Users\\karasd3\\.nuget\\packages\\krafs.rimworld.ref\\1.4.3622-beta\\krafs.rimworld.ref.1.4.3622-beta.nupkg.sha512",
     "C:\\Users\\karasd3\\.nuget\\packages\\lib.harmony\\2.2.2\\lib.harmony.2.2.2.nupkg.sha512"
->>>>>>> Stashed changes
   ],
   "logs": []
 }

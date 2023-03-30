@@ -2,11 +2,7 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.7.2": {
-<<<<<<< Updated upstream
       "Krafs.Rimworld.Ref/1.4.3622-beta": {
-=======
-      "Krafs.Rimworld.Ref/1.4.3636-beta": {
->>>>>>> Stashed changes
         "type": "package",
         "compile": {
           "ref/net472/Assembly-CSharp-firstpass.dll": {},
@@ -101,11 +97,7 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win": {
-<<<<<<< Updated upstream
       "Krafs.Rimworld.Ref/1.4.3622-beta": {
-=======
-      "Krafs.Rimworld.Ref/1.4.3636-beta": {
->>>>>>> Stashed changes
         "type": "package",
         "compile": {
           "ref/net472/Assembly-CSharp-firstpass.dll": {},
@@ -200,11 +192,7 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win-x64": {
-<<<<<<< Updated upstream
       "Krafs.Rimworld.Ref/1.4.3622-beta": {
-=======
-      "Krafs.Rimworld.Ref/1.4.3636-beta": {
->>>>>>> Stashed changes
         "type": "package",
         "compile": {
           "ref/net472/Assembly-CSharp-firstpass.dll": {},
@@ -299,11 +287,7 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win-x86": {
-<<<<<<< Updated upstream
       "Krafs.Rimworld.Ref/1.4.3622-beta": {
-=======
-      "Krafs.Rimworld.Ref/1.4.3636-beta": {
->>>>>>> Stashed changes
         "type": "package",
         "compile": {
           "ref/net472/Assembly-CSharp-firstpass.dll": {},
@@ -399,28 +383,17 @@
     }
   },
   "libraries": {
-<<<<<<< Updated upstream
     "Krafs.Rimworld.Ref/1.4.3622-beta": {
       "sha512": "nGkvBK8WwFMOHDxYH5gop2t/EPGbRlFZfcHn0BKwB+Sc6uXl9qJvFN8f0wU9JmAP97ls1LK/bY/w6ilQOKjX1g==",
       "type": "package",
       "path": "krafs.rimworld.ref/1.4.3622-beta",
-=======
-    "Krafs.Rimworld.Ref/1.4.3636-beta": {
-      "sha512": "zLfe08kaOtfcRpNyeEIKI+IR9da7TqeWCb4qynFqPAZBmZmIgPNUOF0cNh5t4iXlJe00vLWKdWxGO5xZGUM68A==",
-      "type": "package",
-      "path": "krafs.rimworld.ref/1.4.3636-beta",
->>>>>>> Stashed changes
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
         "README.md",
         "icon.png",
-<<<<<<< Updated upstream
         "krafs.rimworld.ref.1.4.3622-beta.nupkg.sha512",
-=======
-        "krafs.rimworld.ref.1.4.3636-beta.nupkg.sha512",
->>>>>>> Stashed changes
         "krafs.rimworld.ref.nuspec",
         "ref/net472/Assembly-CSharp-firstpass.dll",
         "ref/net472/Assembly-CSharp.dll",
@@ -535,11 +508,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.7.2": [
-<<<<<<< Updated upstream
       "Krafs.Rimworld.Ref >= 1.4.3622-beta",
-=======
-      "Krafs.Rimworld.Ref >= 1.4.3636-beta",
->>>>>>> Stashed changes
       "Lib.Harmony >= 2.2.2"
     ]
   },
@@ -578,11 +547,7 @@
         "dependencies": {
           "Krafs.Rimworld.Ref": {
             "target": "Package",
-<<<<<<< Updated upstream
             "version": "[1.4.3622-beta, )"
-=======
-            "version": "[1.4.3636-beta, )"
->>>>>>> Stashed changes
           },
           "Lib.Harmony": {
             "target": "Package",
@@ -602,5 +567,13 @@
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\karasd3\\Documents\\GitHub\\Rimworld-Vanilla-Ammo-Reloaded\\1.4\\Source\\VAR\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

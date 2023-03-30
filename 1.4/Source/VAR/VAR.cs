@@ -30,6 +30,8 @@ namespace VAR
 
             harmony.Patch(AccessTools.Method(typeof(AdditionalVerbProps), "ConfigErrors", new Type[] { typeof(ThingDef) }),
                           prefix: new HarmonyMethod(typeof(AdditionalVerbProps_ConfigErrors_Patch), "Prefix"));
+            harmony.Patch(AccessTools.Method(typeof(DefGenerator), "GenerateImpliedDefs_PreResolve"),
+                          prefix: new HarmonyMethod(typeof(DefGenerator_GenerateImpliedDefs_PreResolve_Patch), "Prefix"));
         }
     }
     [StaticConstructorOnStartup]
@@ -315,9 +317,9 @@ namespace VAR
     }
     public class VerbComp_Reloadable_ChangeableAmmo_Infinite : VerbComp_Reloadable_ChangeableAmmo
     {
-        private readonly ThingOwner<Thing> loadedAmmo = new ThingOwner<Thing>();
+        private static AccessTools.FieldRef<VerbComp_Reloadable_ChangeableAmmo, ThingOwner<Thing>> loadedAmmoField = AccessTools.FieldRefAccess<VerbComp_Reloadable_ChangeableAmmo, ThingOwner<Thing>>("loadedAmmo");
 
-        public Thing nextAmmoItem;
+        private static AccessTools.FieldRef<VerbComp_Reloadable_ChangeableAmmo, Thing> nextAmmoItemField = AccessTools.FieldRefAccess<VerbComp_Reloadable_ChangeableAmmo, Thing>("nextAmmoItem");
         public Pawn Pawn => parent?.Manager?.Pawn;
         public override bool Available()
         {
@@ -334,17 +336,17 @@ namespace VAR
         public CompProperties_CustomProjectile Projectile;
         public override ThingDef ProjectileOverride(ThingDef oldProjectile)
         {
-            Log.Message("start projectile transfer");
+            //Log.Message("start projectile transfer");
             //ThingDef def = nextAmmoItem?.def;
-
-            ThingDef def = base.ProjectileOverride(oldProjectile);
+            ref Thing nextAmmoItem = ref nextAmmoItemField.Invoke(this);
+            ThingDef def = nextAmmoItem?.def;
             if (def != null)
             {
-                Log.Message("found ammo, checking comp");
+                //Log.Message("found ammo, checking comp");
                 CompProperties_CustomProjectile customprojectiles = def.GetCompProperties<CompProperties_CustomProjectile>();
                 if (customprojectiles != null)
                 {
-                    Log.Message("found comp damage mult: " + customprojectiles.damageMultiplier.ToString());
+                    //Log.Message("found comp damage mult: " + customprojectiles.damageMultiplier.ToString());
 
                     Projectile = customprojectiles;
                 }
@@ -365,11 +367,13 @@ namespace VAR
             {
                 Pawn.jobs.EndCurrentJob(JobCondition.Incompletable);
             }
+            ref Thing nextAmmoItem = ref nextAmmoItemField.Invoke(this);
             if (nextAmmoItem != null)
             {
                 nextAmmoItem.stackCount--;
                 if (nextAmmoItem.stackCount == 0)
                 {
+                    ThingOwner<Thing> loadedAmmo = loadedAmmoField.Invoke(this);
                     loadedAmmo.Remove(nextAmmoItem);
                     nextAmmoItem.Destroy();
                     nextAmmoItem = loadedAmmo.FirstOrFallback(null);
@@ -448,7 +452,7 @@ namespace VAR
         }
         public static void FixConfig(VerbCompProperties_Reloadable Props, VerbProperties VerbProps, ThingDef parent)
         {
-            if (Props.AmmoFilter == null)
+            if (Props.AmmoFilter.AnyAllowedDef == null)
             {
                 TechLevel tech = parent.techLevel;
                 Props.AmmoFilter = new ThingFilter();
@@ -497,6 +501,11 @@ namespace VAR
                         }
                         break;
                     default:
+                        ThingCategoryDef named8 = DefDatabase<ThingCategoryDef>.GetNamed("IndustrialAmmo");
+                        if (named8 != null)
+                        {
+                            Props.AmmoFilter.SetAllow(named8, allow: true);
+                        }
                         break;
                 }
             }

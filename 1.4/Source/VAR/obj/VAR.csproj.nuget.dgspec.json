@@ -36,11 +36,7 @@
           "dependencies": {
             "Krafs.Rimworld.Ref": {
               "target": "Package",
-<<<<<<< Updated upstream
               "version": "[1.4.3622-beta, )"
-=======
-              "version": "[1.4.3636-beta, )"
->>>>>>> Stashed changes
             },
             "Lib.Harmony": {
               "target": "Package",

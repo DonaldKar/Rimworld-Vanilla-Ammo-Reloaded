@@ -11,13 +11,19 @@ using Verse;
 
 namespace VAR
 {
-	[HarmonyPatch(typeof(DefGenerator), "GenerateImpliedDefs_PreResolve")]
 	public static class DefGenerator_GenerateImpliedDefs_PreResolve_Patch
-    {
+	{
 		public static void Prefix()
 		{
+			//Log.Message("generating ammo defs");
 			foreach (ThingDef item in AmmoDefGenerator.ImpliedThingDefs())
 			{
+				if (item == null)
+                {
+					Log.Message("null ammo def generated");
+					continue;
+                }
+				//Log.Message(item.defName);
 				DefGenerator.AddImpliedDef(item);
 			}
 		}
@@ -25,25 +31,25 @@ namespace VAR
 
 	public class AmmoDefBase : Def
     {
-		public List<ThingDefCountClass> costList;
-		public List<ResearchProjectDef> researchPrerequisites;
+		public List<ThingDefCountClass> costList = new List<ThingDefCountClass>();
+		public List<ResearchProjectDef> researchPrerequisites = new List<ResearchProjectDef>();
 		public Color color;
 		public List<CompProperties> comps = new List<CompProperties>();
 	}
 	public class AmmoDefTemplate : Def
     {
-		public List<StatModifier> statBases;
-		public List<ThingDefCountClass> costList;
+		public List<StatModifier> statBases = new List<StatModifier>();
+		public List<ThingDefCountClass> costList = new List<ThingDefCountClass>();
 		public StyleCategoryDef dominantStyleCategory;
-		public List<ThingDef> buildingPrerequisites;
-		public List<ResearchProjectDef> researchPrerequisites;
+		public List<ThingDef> buildingPrerequisites = new List<ThingDef>();
+		public List<ResearchProjectDef> researchPrerequisites = new List<ResearchProjectDef>();
 		public TechLevel minTechLevelToBuild;
 		public TechLevel maxTechLevelToBuild;
 		public AltitudeLayer altitudeLayer = AltitudeLayer.Item;
 		public float uiOrder = 2999f;
 		[NoTranslate]
 		public string uiIconPath;
-		public List<IconForStuffAppearance> uiIconPathsStuff;
+		public List<IconForStuffAppearance> uiIconPathsStuff = new List<IconForStuffAppearance>();
 		public Vector2 uiIconOffset;
 		public Color uiIconColor = Color.white;
 		public int uiIconForStackCount = -1;
@@ -59,21 +65,21 @@ namespace VAR
 		public List<CompProperties> comps = new List<CompProperties>();
 		[NoTranslate]
         public string devNote;
-        public List<ThingDefCountClass> smeltProducts;
+		public List<ThingDefCountClass> smeltProducts;
         public bool smeltable;
         public bool burnableByRecipe;
         public bool randomizeRotationOnSpawn;
-        public List<DamageMultiplier> damageMultipliers;
-        public RecipeMakerProperties recipeMaker;
+		public List<DamageMultiplier> damageMultipliers = new List<DamageMultiplier>();
+        public RecipeMakerProperties recipeMaker = new RecipeMakerProperties();
         public bool forceDebugSpawnable;
         public bool intricate;
         public bool scatterableOnMapGen = true;
         public float generateCommonality = 1f;
         public float generateAllowChance = 1f;
         public FloatRange startingHpRange = FloatRange.One;
-        [NoTranslate]
-		public List<string> thingSetMakerTags;
-        public List<RecipeDef> recipes;
+		[NoTranslate]
+		public List<string> thingSetMakerTags = new List<string>();
+		public List<RecipeDef> recipes = new List<RecipeDef>();
         public bool messageOnDeteriorateInStorage = true;
         public bool deteriorateFromEnvironmentalEffects = true;
         public bool canDeteriorateUnspawned;
@@ -90,7 +96,7 @@ namespace VAR
         public GraphicData graphicData;
 		public DrawerType drawerType = DrawerType.MapMeshOnly;
         public float hideAtSnowDepth = 99999f;
-        public List<ThingStyleChance> randomStyle;
+		public List<ThingStyleChance> randomStyle = new List<ThingStyleChance>();
         public float randomStyleChance;
         public bool canEditAnyStyle;
         public bool selectable=true;
@@ -106,7 +112,7 @@ namespace VAR
         public bool hasCustomRectForSelector;
         public bool alwaysHaulable=true;
         public bool designateHaulable;
-        public List<ThingCategoryDef> thingCategories;
+		public List<ThingCategoryDef> thingCategories = new List<ThingCategoryDef>();
 		public bool socialPropernessMatters;
         public bool stealable = true;
         public SoundDef soundDrop;
@@ -117,12 +123,12 @@ namespace VAR
 		public SoundDef soundOpen;
 		public Tradeability tradeability = Tradeability.All;
 		[NoTranslate]
-		public List<string> tradeTags;
+		public List<string> tradeTags = new List<string>();
 		public bool tradeNeverStack;
 		public bool tradeNeverGenerateStacked;
 		public bool healthAffectsPrice = true;
 		public TechLevel techLevel;
-        public List<string> weaponTags;
+		public List<string> weaponTags = new List<string>();
         public bool destroyOnDrop;
         public SoundDef meleeHitSound;
         public IngestibleProperties ingestible;
@@ -134,28 +140,36 @@ namespace VAR
 	}
 	public class AmmoDefSecondary : AmmoDefBase
 	{
+		public float DamageMultiplier;
+		public float APMultiplier;
 		public DamageDef NeolithicDamageDef;
 		public DamageDef MedievalDamageDef;
 		public DamageDef IndustrialDamageDef;
 		public DamageDef SpacerDamageDef;
 		public DamageDef UltratechDamageDef;
 		public DamageDef ArchotechDamageDef;
-		public List<ExtraDamage> extraDamages;
+		public List<ExtraDamage> extraDamages = new List<ExtraDamage>();
 	}
 	public static class AmmoDefGenerator
     {
 		public static IEnumerable<ThingDef> ImpliedThingDefs()
 		{
+			//Log.Message("looking for template");
 			foreach (AmmoDefTemplate allDef in DefDatabase<AmmoDefTemplate>.AllDefs)
 			{
+				//Log.Message("found template");
 				foreach (AmmoDefPrimary primary in DefDatabase<AmmoDefPrimary>.AllDefs)
 				{
+					//Log.Message("found primary");
+
 					foreach (AmmoDefSecondary secondary in DefDatabase<AmmoDefSecondary>.AllDefs)
 					{
+						//Log.Message("found secondary");
+
 						ThingDef thingDef = BaseAmmo(allDef);
 						thingDef.defName = primary.defName + "_" + secondary.defName + "_" + thingDef.defName;
-						thingDef.label = primary.label + secondary.label + thingDef.label;//(armor piercing/softbody/polymertipped/steelcore + incindiary/toxic/emp/cryogenic/corrosive/(Gaseous/smoking/infectious)/fragmenting?HighExplosive?(bomb)/penetrator(pierce)/flechette(cut)/"less lethal"(blunt)/(radioactive) + (techlevel) ammo
-						thingDef.description = primary.description + secondary.description + thingDef.description;
+						thingDef.label = primary.label + secondary.label + thingDef.label;//(armor piercing/softbody/polymertipped/steelcore + incendiary/toxic/emp/cryogenic/corrosive/(Gaseous/smoking/infectious)/fragmenting?HighExplosive?(bomb)/penetrator(pierce)/flechette(cut)/"less lethal"(blunt)/(radioactive) + (techlevel) ammo
+						thingDef.description = thingDef.description + "\n\n" + primary.description + "\n\n" + secondary.description;
 						thingDef.comps.AddRange(primary.comps);
 						thingDef.comps.AddRange(secondary.comps);
 						thingDef.graphicData.color = primary.color;
@@ -165,13 +179,36 @@ namespace VAR
 						thingDef.costList.AddRange(primary.costList);
 						thingDef.costList.AddRange(secondary.costList);
 
+						float num = 0f;
+						float num2 = thingDef.recipeMaker.workAmount/60f;
+						float num3 = thingDef.recipeMaker.productCount;
+						if (thingDef.costList != null)
+						{
+							for (int j = 0; j < thingDef.CostList.Count; j++)
+							{
+								ThingDefCountClass thingDefCountClass = thingDef.costList[j];
+								int num4 = thingDefCountClass.thingDef.smallVolume ? 10 : 1;
+								num += (float)thingDefCountClass.count * thingDefCountClass.thingDef.BaseMarketValue * num4;
+							}
+						}
+						if(num2 > 2f)
+						{
+							num += num2 * 0.0036f;
+						}
+						num /= num3;
+						StatModifier stat = new StatModifier();
+						stat.stat = StatDefOf.MarketValue;
+						stat.value = num;
+						thingDef.statBases.Add(stat);
+
 						CompProperties_CustomProjectile comp = new CompProperties_CustomProjectile
 						{
 							compClass = typeof(CompCustomProjectile),
-							damageMultiplier = primary.DamageMultiplier,
-							apMultiplier = primary.APMultiplier,
+							damageMultiplier = primary.DamageMultiplier*secondary.DamageMultiplier,
+							apMultiplier = primary.APMultiplier*secondary.APMultiplier,
 							extraDamages = secondary.extraDamages,
 						};
+						thingDef.description += "\n\nDamage Multiplier: " + (primary.DamageMultiplier * secondary.DamageMultiplier).ToString() + "\nArmor Piercing Multiplier: " + (primary.APMultiplier * secondary.APMultiplier).ToString();
 						switch (thingDef.techLevel)
 						{
 							case TechLevel.Neolithic:
@@ -208,20 +245,22 @@ namespace VAR
 			thingDef.drawerType = def.drawerType;
 			thingDef.category = def.category;
 			thingDef.thingClass = typeof(ThingWithComps);
-			if (thingDef.costList == null)
+			//Log.Message("log1");
+			thingDef.costList = new List<ThingDefCountClass>();
+			if (def.costList != null)
 			{
-				thingDef.costList = new List<ThingDefCountClass>();
+				thingDef.costList.AddRange(def.costList);
 			}
-			thingDef.costList.AddRange(def.costList);
-			if (thingDef.researchPrerequisites == null)
+			//Log.Message("log2");
+			thingDef.researchPrerequisites = new List<ResearchProjectDef>();
+			if (def.researchPrerequisites != null)
 			{
-				thingDef.researchPrerequisites = new List<ResearchProjectDef>();
+				thingDef.researchPrerequisites.AddRange(def.researchPrerequisites);
 			}
-			thingDef.researchPrerequisites.AddRange(def.researchPrerequisites);
-			if (thingDef.graphicData == null)
-			{
-				thingDef.graphicData = new GraphicData();
-			}
+			//Log.Message("log3");
+			//Log.Message("log3.1");
+			thingDef.graphicData = new GraphicData();
+			//Log.Message("log4");
 			thingDef.graphicData.texPath = def.graphicData.texPath;
 			thingDef.graphicData.maskPath= def.graphicData.maskPath;
 			thingDef.graphicData.graphicClass=def.graphicData.graphicClass;
@@ -246,24 +285,27 @@ namespace VAR
 			thingDef.graphicData.linkType = def.graphicData.linkType;
 			thingDef.graphicData.linkFlags=def.graphicData.linkFlags;
 			thingDef.graphicData.asymmetricLink=def.graphicData.asymmetricLink;
-
+			//Log.Message("log5");
 			thingDef.useHitPoints = def.useHitPoints;
-			if (thingDef.thingSetMakerTags == null)
+			thingDef.thingSetMakerTags = new List<string>();
+			if (def.thingSetMakerTags != null)
 			{
-				thingDef.thingSetMakerTags = new List<string>();
+				thingDef.thingSetMakerTags.AddRange(def.thingSetMakerTags);
 			}
-			thingDef.thingSetMakerTags.AddRange(def.thingSetMakerTags);
-			if (thingDef.statBases == null)
+			//Log.Message("log6");
+			thingDef.statBases = new List<StatModifier>();
+			if (def.statBases != null)
 			{
-				thingDef.statBases = new List<StatModifier>();
+				thingDef.statBases.AddRange(def.statBases);
 			}
-			thingDef.statBases.AddRange(def.statBases);
+			//Log.Message("log7");
 			thingDef.altitudeLayer = def.altitudeLayer;
-			if (thingDef.comps == null)
+			thingDef.comps = new List<CompProperties>();
+			if (def.comps != null)
 			{
-				thingDef.comps = new List<CompProperties>();
+				thingDef.comps.AddRange(def.comps);
 			}
-			thingDef.comps.AddRange(def.comps);
+			//Log.Message("log8");
 			thingDef.soundDrop = def.soundDrop;
 			thingDef.soundPickup = def.soundPickup;
 			thingDef.soundInteract = def.soundInteract;
@@ -275,22 +317,23 @@ namespace VAR
 			thingDef.pathCost = DefGenerator.StandardItemPathCost;
 			thingDef.modContentPack = def.modContentPack;
 			thingDef.tradeability = def.tradeability;
-			if (thingDef.tradeTags == null)
+			thingDef.tradeTags = new List<string>();
+			if (def.tradeTags != null)
 			{
-				thingDef.tradeTags = new List<string>();
+				thingDef.tradeTags.AddRange(def.tradeTags);
 			}
-			thingDef.tradeTags.AddRange(def.tradeTags);
+			//Log.Message("log9");
 			thingDef.tradeNeverStack = def.tradeNeverStack;
 			thingDef.tradeNeverGenerateStacked = def.tradeNeverGenerateStacked;
 			thingDef.techLevel= def.techLevel;
 			thingDef.minTechLevelToBuild= def.minTechLevelToBuild;
 			thingDef.maxTechLevelToBuild = def.maxTechLevelToBuild;
 			thingDef.description = def.description;
-			if (thingDef.thingCategories == null)
+			thingDef.thingCategories = new List<ThingCategoryDef>();
+			if (def.thingCategories != null)
 			{
-				thingDef.thingCategories = new List<ThingCategoryDef>();
+				thingDef.thingCategories.AddRange(def.thingCategories);
 			}
-			thingDef.thingCategories.AddRange(def.thingCategories);
 			thingDef.defName = def.defName;
 			thingDef.label = def.label;
 			thingDef.stackLimit = def.stackLimit;
@@ -305,38 +348,41 @@ namespace VAR
 			thingDef.uiOrder = def.uiOrder;
 			thingDef.uiIconForStackCount = def.uiIconForStackCount;
 			thingDef.dominantStyleCategory = def.dominantStyleCategory;
-			if (thingDef.buildingPrerequisites == null)
+			//Log.Message("log10");
+			thingDef.buildingPrerequisites = new List<ThingDef>();
+			if (def.buildingPrerequisites != null)
 			{
-				thingDef.buildingPrerequisites = new List<ThingDef>();
+				thingDef.buildingPrerequisites.AddRange(def.buildingPrerequisites);
 			}
-			thingDef.buildingPrerequisites.AddRange(def.buildingPrerequisites);
-
-			if (thingDef.weaponTags == null)
+			thingDef.weaponTags = new List<string>();
+			if (def.weaponTags != null)
 			{
-				thingDef.weaponTags = new List<string>();
+				thingDef.weaponTags.AddRange(def.weaponTags);
 			}
-			thingDef.weaponTags.AddRange(def.weaponTags);
 			thingDef.destroyOnDrop= def.destroyOnDrop;
 			thingDef.meleeHitSound= def.meleeHitSound;
 			thingDef.stealable = def.stealable;
+			//Log.Message("log11");
 
 			thingDef.size = def.size;
 			thingDef.destroyable = def.destroyable;
 			thingDef.smallVolume = def.smallVolume;
 			thingDef.devNote = def.devNote;
-			if (thingDef.smeltProducts == null)
+			if (def.smeltProducts != null)
 			{
 				thingDef.smeltProducts = new List<ThingDefCountClass>();
+				thingDef.smeltProducts.AddRange(def.smeltProducts);
 			}
-			thingDef.smeltProducts.AddRange(def.smeltProducts);
 			thingDef.smeltable = def.smeltable;
 			thingDef.burnableByRecipe = def.burnableByRecipe;
 			thingDef.randomizeRotationOnSpawn=def.randomizeRotationOnSpawn;
-			if (thingDef.damageMultipliers == null)
+			thingDef.damageMultipliers = new List<DamageMultiplier>();
+			if (def.damageMultipliers != null)
 			{
-				thingDef.damageMultipliers = new List<DamageMultiplier>();
+				thingDef.damageMultipliers.AddRange(def.damageMultipliers);
 			}
-			thingDef.damageMultipliers.AddRange(def.damageMultipliers);
+			//Log.Message("log12");
+
 			thingDef.recipeMaker = def.recipeMaker;
 			thingDef.forceDebugSpawnable=def.forceDebugSpawnable;
 			thingDef.intricate=def.intricate;
@@ -344,12 +390,11 @@ namespace VAR
 			thingDef.generateCommonality = def.generateCommonality;
 			thingDef.generateAllowChance = def.generateAllowChance;
 			thingDef.startingHpRange = def.startingHpRange;
-
-			if (thingDef.recipes == null)
+			thingDef.recipes = new List<RecipeDef>();
+			if (def.recipes != null)
 			{
-				thingDef.recipes = new List<RecipeDef>();
+				thingDef.recipes.AddRange(def.recipes);
 			}
-			thingDef.recipes.AddRange(def.recipes);
 			thingDef.messageOnDeteriorateInStorage=def.messageOnDeteriorateInStorage;
 			thingDef.deteriorateFromEnvironmentalEffects = def.deteriorateFromEnvironmentalEffects;
 			thingDef.canDeteriorateUnspawned=def.canDeteriorateUnspawned;
@@ -363,13 +408,14 @@ namespace VAR
 			thingDef.possessionCount=def.possessionCount;
 			thingDef.notifyMapRemoved=def.notifyMapRemoved;
 			thingDef.canScatterOver = def.canScatterOver;
+			//Log.Message("log13");
 
 			thingDef.hideAtSnowDepth = def.hideAtSnowDepth;
-			if (thingDef.randomStyle == null)
+			thingDef.randomStyle = new List<ThingStyleChance>();
+			if (def.randomStyle != null)
 			{
-				thingDef.randomStyle = new List<ThingStyleChance>();
+				thingDef.randomStyle.AddRange(def.randomStyle);
 			}
-			thingDef.randomStyle.AddRange(def.randomStyle);
 			thingDef.randomStyleChance=def.randomStyleChance;
 			thingDef.canEditAnyStyle=def.canEditAnyStyle;
 			thingDef.selectable=def.selectable;
@@ -384,6 +430,7 @@ namespace VAR
 			thingDef.hasCustomRectForSelector=def.hasCustomRectForSelector;
 			thingDef.alwaysHaulable = def.alwaysHaulable;
 			thingDef.designateHaulable = def.designateHaulable;
+			//Log.Message("log14");
 
 			return thingDef;
 		}
