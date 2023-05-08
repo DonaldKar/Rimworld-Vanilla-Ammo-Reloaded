@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+	<Operation Class="VAR.PatchOperationXmlSetting">
+		<setting>MVCFAutoPatch</setting>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]or not(weaponTags)][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]]/comps</xpath>
+					<value>
+						<li Class="MVCF.Comps.CompProperties_VerbProps">
+							<compClass>MVCF.Comps.Comp_VerbProps</compClass>
+							<verbProps>
+								<li>
+									<label>CustomVARAmmo</label>
+									<visualLabel>Ammunition Loaded</visualLabel>
+									<canBeToggled>false</canBeToggled>
+									<comps>
+										<li Class="MVCF.Reloading.Comps.VerbCompProperties_Reloadable">
+											<compClass>VAR.MVCF.VerbComp_Reloadable_ChangeableAmmo_Infinite</compClass>
+											<AmmoFilter>
+												<categories>
+													<li>IndustrialAmmo</li>
+												</categories>
+											</AmmoFilter>
+											<ItemsPerShot>1</ItemsPerShot>
+											<ReloadTimePerShot>0.1</ReloadTimePerShot>
+											<!--<ReloadSound>ReloadWeapon</ReloadSound>-->
+										</li>
+									</comps>
+								</li>
+							</verbProps>
+						</li>
+					</value>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]or not(weaponTags)][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]][not(comps)]</xpath>
+					<value>
+						<comps>
+							<li Class="MVCF.Comps.CompProperties_VerbProps">
+								<compClass>MVCF.Comps.Comp_VerbProps</compClass>
+								<verbProps>
+									<li>
+										<label>CustomVARAmmo</label>
+										<canBeToggled>false</canBeToggled>
+										<comps>
+											<li Class="MVCF.Reloading.Comps.VerbCompProperties_Reloadable">
+												<compClass>VAR.MVCF.VerbComp_Reloadable_ChangeableAmmo_Infinite</compClass>
+												<AmmoFilter>
+													<categories>
+														<li>IndustrialAmmo</li>
+													</categories>
+												</AmmoFilter>
+												<ItemsPerShot>1</ItemsPerShot>
+												<ReloadTimePerShot>0.1</ReloadTimePerShot>
+											</li>
+										</comps>
+									</li>
+								</verbProps>
+							</li>
+						</comps>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+</Patch>

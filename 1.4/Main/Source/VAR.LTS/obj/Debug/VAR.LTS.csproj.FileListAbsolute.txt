@@ -1,0 +1,9 @@
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR.LTS\obj\Debug\VAR.LTS.csproj.AssemblyReference.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR.LTS\obj\Debug\VAR.LTS.csproj.CoreCompileInputs.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.LTS\obj\Debug\VAR.LTS.csproj.AssemblyReference.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.LTS\obj\Debug\VAR.LTS.csproj.CoreCompileInputs.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\LTS\Assemblies\VAR.LTS.dll
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\LTS\Assemblies\VAR.LTS.pdb
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.LTS\obj\Debug\VAR.LTS.csproj.CopyComplete
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.LTS\obj\Debug\VAR.LTS.dll
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.LTS\obj\Debug\VAR.LTS.pdb

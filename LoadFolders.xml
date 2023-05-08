@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<loadFolders>
+	<v1.4>
+        <li>/</li>
+		<li>1.4/Main</li>
+        <li IfModActive="OskarPotocki.VanillaFactionsExpanded.Core">1.4/MVCF</li>
+        <li IfModActive="LimeTreeSnake.Ammunition">1.4/LTS</li>
+    </v1.4>
+</loadFolders>

@@ -1,0 +1,9 @@
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR.MVCF\obj\Debug\VAR.MVCF.csproj.AssemblyReference.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Source\VAR.MVCF\obj\Debug\VAR.MVCF.csproj.CoreCompileInputs.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\MVCF\Assemblies\VAR.MVCF.dll
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\MVCF\Assemblies\VAR.MVCF.pdb
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.MVCF\obj\Debug\VAR.MVCF.csproj.AssemblyReference.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.MVCF\obj\Debug\VAR.MVCF.csproj.CoreCompileInputs.cache
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.MVCF\obj\Debug\VAR.MVCF.csproj.CopyComplete
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.MVCF\obj\Debug\VAR.MVCF.dll
+C:\Users\karasd3\Documents\GitHub\Rimworld-Vanilla-Ammo-Reloaded\1.4\Main\Source\VAR.MVCF\obj\Debug\VAR.MVCF.pdb

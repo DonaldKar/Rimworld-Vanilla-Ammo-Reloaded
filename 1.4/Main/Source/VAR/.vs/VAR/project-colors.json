@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "06c33236-3e25-42b0-b5f4-e22bc46b4e7c": {
+      "ProjectGuid": "06c33236-3e25-42b0-b5f4-e22bc46b4e7c",
+      "DisplayName": "Horizon",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "49499170-d09d-46ac-8f85-9cf773d80568": {
+      "ProjectGuid": "49499170-d09d-46ac-8f85-9cf773d80568",
+      "DisplayName": "VAR.LTS",
+      "ColorIndex": 1
+    },
+    "e32ed1e5-9f7f-4b74-bf0d-5c9740ec36f5": {
+      "ProjectGuid": "e32ed1e5-9f7f-4b74-bf0d-5c9740ec36f5",
+      "DisplayName": "VAR.MVCF",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

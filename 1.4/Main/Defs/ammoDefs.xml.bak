@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Defs>
+	<!--tech level filters-->
+	<ThingCategoryDef>
+		<defName>Ammunition</defName>
+		<label>Ammunition</label>
+		<parent>Manufactured</parent>
+	</ThingCategoryDef>
+	
+	<ThingCategoryDef>
+		<defName>NeolithicAmmo</defName>
+		<label>Neolithic Ammo</label>
+		<parent>Ammunition</parent>
+	</ThingCategoryDef>
+	
+	<ThingCategoryDef>
+		<defName>MedievalAmmo</defName>
+		<label>Medieval Ammo</label>
+		<parent>Ammunition</parent>
+	</ThingCategoryDef>
+	
+	<ThingCategoryDef>
+		<defName>IndustrialAmmo</defName>
+		<label>Industrial Ammo</label>
+		<parent>Ammunition</parent>
+	</ThingCategoryDef>
+	
+	<ThingCategoryDef>
+		<defName>SpacerAmmo</defName>
+		<label>Spacer Ammo</label>
+		<parent>Ammunition</parent>
+	</ThingCategoryDef>
+	
+	<ThingCategoryDef>
+		<defName>UltraAmmo</defName>
+		<label>Ultratech Ammo</label>
+		<parent>Ammunition</parent>
+	</ThingCategoryDef>
+	
+	<ThingCategoryDef>
+		<defName>ArchotechAmmo</defName>
+		<label>Archotech Ammo</label>
+		<parent>Ammunition</parent>
+	</ThingCategoryDef>
+	
+	<!--generic template base, nothing unique-->
+	<VAR.AmmoDefTemplate Abstract="true" Name="CustomBullet">
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<useHitPoints>true</useHitPoints>
+		<selectable>true</selectable>
+		<altitudeLayer>Item</altitudeLayer>
+		<stackLimit>500</stackLimit>
+		<alwaysHaulable>true</alwaysHaulable>
+		<drawGUIOverlay>true</drawGUIOverlay>
+		<rotatable>false</rotatable>
+		<allowedArchonexusCount>-1</allowedArchonexusCount>
+		<soundInteract>Metal_Drop</soundInteract>
+		<soundDrop>Standard_Drop</soundDrop>
+		<tickerType>Normal</tickerType>
+		<statBases>
+			<Beauty>-4</Beauty>
+			<MaxHitPoints>60</MaxHitPoints>
+			<Mass>.1</Mass>
+			<Flammability>1.0</Flammability>
+			<DeteriorationRate>1.5</DeteriorationRate>
+		</statBases>
+		<possessionCount>60</possessionCount>
+		<comps>
+			<li Class="CompProperties_Forbiddable"/>
+		</comps>
+	</VAR.AmmoDefTemplate>
+	<!--tech level templates-->
+	<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>Neolithic_ammo</defName>
+		<label>Neolithic Ammo</label>
+		<description>Arrows, Stones, and Pitch Pots that are compatible with Neolithic Tech weapons.</description>
+		<techLevel>Neolithic</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+		</graphicData>
+		<costList>
+			<WoodLog>50</WoodLog>
+		</costList>
+		<thingCategories>
+			<li>NeolithicAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_MakeBow</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>CraftingSpot</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+		</recipeMaker>
+		<modExtensions>
+            <li MayRequire="LimeTreeSnake.Ammunition" Class="Ammunition.DefModExtensions.AmmunitionExtension" />
+        </modExtensions>
+	</VAR.AmmoDefTemplate>
+	
+	<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>Medieval_ammo</defName>
+		<label>Medieval Ammo</label>
+		<description>Powder horns, Shot Pellets, and Bolts that are compatible with Medieval Tech weapons.</description>
+		<techLevel>Medieval</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+		</graphicData>
+		<costList>
+			<Steel>50</Steel>
+		</costList>
+		<thingCategories>
+			<li>MedievalAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Smith</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>FueledSmithy</li>
+				<li>ElectricSmithy</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>Smithing</researchPrerequisite>
+		</recipeMaker>
+	</VAR.AmmoDefTemplate>
+		
+	
+	<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>Industrial</defName>
+		<label>Industrial Ammo</label>
+		<description>Cased Ammunition, Rockets, and Grenades that are compatible with Industrial Tech weapons. Explodes when damaged.</description>
+		<techLevel>Industrial</techLevel>
+		<graphicData>
+			<texPath>IndustrialAmmo</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+			<shaderType>CutoutComplex</shaderType>
+		</graphicData>
+		<costList>
+			<Chemfuel>50</Chemfuel>
+		</costList>
+		<thingCategories>
+			<li>IndustrialAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>TableMachining</li>
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>Gunsmithing</researchPrerequisite>
+		</recipeMaker>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Bullet</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+	</VAR.AmmoDefTemplate>
+	
+	<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>Spacer_ammo</defName>
+		<label>Spacer Ammo</label>
+		<description>Charged Ammunition and Bolter Rounds that are compatible with Spacer Tech weapons. Explodes when damaged.</description>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+		</graphicData>
+		<costList>
+			<ComponentIndustrial>5</ComponentIndustrial>
+		</costList>
+		<thingCategories>
+			<li>SpacerAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedComponent</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>ChargedShot</researchPrerequisite>
+		</recipeMaker>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Bomb</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+	</VAR.AmmoDefTemplate>
+	
+	<!--<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>Ultra_ammo</defName>
+		<label>Ultratech Ammo</label>
+		<description>Plasma Ammunition and Containment field Grenades that are compatible with UltraTech weapons. Explodes when damaged.</description>
+		<techLevel>Ultra</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+		</graphicData>
+		<costList>
+			<Uranium>30</Uranium>
+		</costList>
+		<thingCategories>
+			<li>UltraAmmo</li>
+			<li>ArchotechAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedPack</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>AdvancedFabrication</researchPrerequisite>
+		</recipeMaker>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Vaporize</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+	</VAR.AmmoDefTemplate>-->
+	
+	<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>Archotech_ammo</defName>
+		<label>Archotech Ammo</label>
+		<description>Archotech Ammunition. Weapons that are compatible with this type of ammunition are rare to find.</description>
+		<techLevel>Archotech</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+		</graphicData>
+		<costList>
+			<SpacerComponent>1</SpacerComponent>
+		</costList>
+		<thingCategories>
+			<li>UltraAmmo</li>
+			<li>ArchotechAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedHealthItemBionic</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>ShipComputerCore</researchPrerequisite>
+		</recipeMaker>
+	</VAR.AmmoDefTemplate>
+	
+	<!--primaries-->
+	
+	<VAR.AmmoDefPrimary>
+		<defName>SC</defName>
+		<label>Steel Core </label>
+		<description>This Ammunition contains a Steel core to Moderately Improve its Armor Piercing and Damage capabilities.</description>
+		<costList>
+			<Steel>30</Steel>
+		</costList>
+		<DamageMultiplier>1.5</DamageMultiplier>
+		<APMultiplier>1.5</APMultiplier>
+		<color>(105,105,105)</color>
+	</VAR.AmmoDefPrimary>
+	
+	<VAR.AmmoDefPrimary>
+		<defName>PT</defName>
+		<label>Polymer Tipped </label>
+		<description>This Ammunition contains a Plasteel core to Slightly Improve its Damage and Significantly Improve its Armor Piercing capabilities.</description>
+		<costList>
+			<Plasteel>6</Plasteel>
+		</costList>
+		<DamageMultiplier>1.25</DamageMultiplier>
+		<APMultiplier>1.75</APMultiplier>
+		<color>(160,178,181)</color>
+	</VAR.AmmoDefPrimary>
+	
+	<VAR.AmmoDefPrimary>
+		<defName>AP</defName>
+		<label>Armor Piercing </label>
+		<description>This Ammunition contains an Uranium core to Greatly Improve its Armor Piercing capabilities.</description>
+		<costList>
+			<Uranium>9</Uranium>
+		</costList>
+		<DamageMultiplier>1</DamageMultiplier>
+		<APMultiplier>2</APMultiplier>
+		<color>(50,50,50)</color>
+	</VAR.AmmoDefPrimary>
+	
+	<VAR.AmmoDefPrimary>
+		<defName>SP</defName>
+		<label>Soft Point </label>
+		<description>This Ammunition contains a Gold core to Greatly Improve the Damage dealt to the target, but Significantly Reduce the Armor Piercing capabilities</description>
+		<costList>
+			<Gold>1</Gold>
+		</costList>
+		<DamageMultiplier>2</DamageMultiplier>
+		<APMultiplier>0.5</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(255,235,122)</color>
+		<!--<comps>-->
+	</VAR.AmmoDefPrimary>
+	
+	
+	<!--secondaries-->
+	<VAR.AmmoDefSecondary>
+		<defName>Incendiary</defName>
+		<label>Incendiary </label>
+		<description>The projectile contains a compound that will ignite on impact causing extra burn damage to the target. Causes a Fiery explosion if destroyed.</description>
+		<costList>
+			<Chemfuel>25</Chemfuel>
+		</costList>
+		<DamageMultiplier>1</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(1,0,0)</color>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Flame</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+		<extraDamages>
+			<li>
+				<def>Flame</def>
+				<amount>5</amount>
+				<armorPenetration>0</armorPenetration>
+				<chance>1</chance>
+			</li>
+		</extraDamages>
+	</VAR.AmmoDefSecondary>
+	
+	<VAR.AmmoDefSecondary>
+		<defName>EMP</defName>
+		<label>EMP </label>
+		<description>The projectile contains a electrode that will cause a localized EMP on impact. Causes an EMP explosion if destroyed.</description>
+		<costList>
+			<ComponentIndustrial>2</ComponentIndustrial>
+		</costList>
+		<DamageMultiplier>1</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(0,0,1)</color>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>EMP</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+		<extraDamages>
+			<li>
+				<def>EMP</def>
+				<amount>40</amount>
+				<armorPenetration>0</armorPenetration>
+				<chance>1</chance>
+			</li>
+			<li>
+				<def>ShockBurn</def>
+				<amount>5</amount>
+				<armorPenetration>0</armorPenetration>
+				<chance>1</chance>
+			</li>
+		</extraDamages>
+	</VAR.AmmoDefSecondary>
+	
+	<VAR.AmmoDefSecondary>
+		<defName>Cryo</defName>
+		<label>Cryogenic </label>
+		<description>The projectile contains a chemical compound that causes frostbite damage to the target. Causes a Freezing explosion if destroyed.</description>
+		<costList>
+			<Neutroamine>10</Neutroamine>
+		</costList>
+		<DamageMultiplier>1</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(200,200,250)</color>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Frostbite</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+		<extraDamages>
+			<li>
+				<def>Frostbite</def>
+				<amount>5</amount>
+				<armorPenetration>0</armorPenetration>
+				<chance>1</chance>
+			</li>
+		</extraDamages>
+		<NeolithicDamageDef>ArrowCryo</NeolithicDamageDef>
+		<MedievalDamageDef>ArrowCryo</MedievalDamageDef>
+		<IndustrialDamageDef>BulletCryo</IndustrialDamageDef>
+		<SpacerDamageDef>BulletCryo</SpacerDamageDef>
+		<UltratechDamageDef>BulletCryo</UltratechDamageDef>
+		<ArchotechDamageDef>BulletCryo</ArchotechDamageDef>
+	</VAR.AmmoDefSecondary>
+	
+	<VAR.AmmoDefSecondary>
+		<defName>Toxic</defName>
+		<label>Toxin-Coated </label>
+		<description>The projectile is coated in a toxic compound that causes toxic buildup in the target, but reduces damage. Emits ToxGas when destroyed or deteriorated.</description>
+		<costList>
+			<Wastepack>16</Wastepack>
+		</costList>
+		<DamageMultiplier>.75</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(0,1,0)</color>
+		<comps>
+			<li Class="CompProperties_GasOnDamage">
+				<type>ToxGas</type>
+				<damageFactor>1</damageFactor>
+				<useStackCountAsFactor>true</useStackCountAsFactor>
+			</li>
+			<li Class="CompProperties_Dissolution">
+				<dissolutionAfterDays>24</dissolutionAfterDays>
+				<dissolutinFactorIndoors>0.001</dissolutinFactorIndoors>
+				<dissolutionFactorRain>2</dissolutionFactorRain>
+			</li>
+			<li Class="CompProperties_DissolutionEffectPollution">
+				<cellsToPollutePerDissolution>1</cellsToPollutePerDissolution>
+				<tilePollutionPerDissolution>0.0005</tilePollutionPerDissolution>
+				<!-- 2000 wastepacks fill a tile -->
+				<waterTilePollutionFactor>8</waterTilePollutionFactor>
+			</li>
+		</comps>
+		<NeolithicDamageDef>ArrowToxic</NeolithicDamageDef>
+		<MedievalDamageDef>ArrowToxic</MedievalDamageDef>
+		<IndustrialDamageDef>BulletToxic</IndustrialDamageDef>
+		<SpacerDamageDef>BulletToxic</SpacerDamageDef>
+		<UltratechDamageDef>BulletToxic</UltratechDamageDef>
+		<ArchotechDamageDef>BulletToxic</ArchotechDamageDef>
+
+	</VAR.AmmoDefSecondary>
+
+	<VAR.AmmoDefSecondary>
+		<defName>Acid</defName>
+		<label>Corrosive </label>
+		<description>The projectile contains corrosive compounds that will cause acid burns in the target. Emits ToxGas when destroyed or deteriorated.</description>
+		<costList>
+			<Wastepack>16</Wastepack>
+			<Neutroamine>8</Neutroamine>
+		</costList>
+		<DamageMultiplier>1</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(200,250,200)</color>
+		<comps>
+			<li Class="CompProperties_GasOnDamage">
+				<type>ToxGas</type>
+				<damageFactor>1</damageFactor>
+				<useStackCountAsFactor>true</useStackCountAsFactor>
+			</li>
+			<li Class="CompProperties_Dissolution">
+				<dissolutionAfterDays>24</dissolutionAfterDays>
+				<dissolutinFactorIndoors>0.001</dissolutinFactorIndoors>
+				<dissolutionFactorRain>2</dissolutionFactorRain>
+			</li>
+			<li Class="CompProperties_DissolutionEffectPollution">
+				<cellsToPollutePerDissolution>1</cellsToPollutePerDissolution>
+				<tilePollutionPerDissolution>0.0005</tilePollutionPerDissolution>
+				<!-- 2000 wastepacks fill a tile -->
+				<waterTilePollutionFactor>8</waterTilePollutionFactor>
+			</li>
+		</comps>
+		<extraDamages>
+			<li>
+				<def>AcidBurnVE</def>
+				<amount>10</amount>
+				<armorPenetration>0.5</armorPenetration>
+				<chance>1</chance>
+			</li>
+		</extraDamages>
+	</VAR.AmmoDefSecondary>
+	
+	<VAR.AmmoDefSecondary>
+		<defName>Thump</defName>
+		<label>Breaching </label>
+		<description>The projectile contains a concussive capsule which drastically increases damage to buildings but reduces damage against non building targets.</description>
+		<costList>
+			<ComponentIndustrial>1</ComponentIndustrial>
+		</costList>
+		<DamageMultiplier>0.5</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<!--<researchPrerequisites>-->
+		<color>(200,200,200)</color>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Thump</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+		<NeolithicDamageDef>Thump</NeolithicDamageDef>
+		<MedievalDamageDef>Thump</MedievalDamageDef>
+		<IndustrialDamageDef>Thump</IndustrialDamageDef>
+		<SpacerDamageDef>Thump</SpacerDamageDef>
+		<UltratechDamageDef>Thump</UltratechDamageDef>
+		<ArchotechDamageDef>Thump</ArchotechDamageDef>
+	</VAR.AmmoDefSecondary>
+
+
+	<!--<VAR.AmmoDefSecondary MayRequire= "Ludeon.RimWorld.Biotech">
+		<defName>Gas</defName>
+		<label>Gaseous </label>
+		<description>The projectile contains volatile compounds that will release ToxGas on impact. Emits ToxGas when destroyed or deteriorated.</description>
+		<costList>
+			<Wastepack>16</Wastepack>
+			<Chemfuel>20</Chemfuel>
+		</costList>
+		<DamageMultiplier>1</DamageMultiplier>
+		<APMultiplier>1</APMultiplier>
+		<color>(100,250,100)</color>
+		<comps>
+			<li Class="CompProperties_GasOnDamage">
+				<type>ToxGas</type>
+				<damageFactor>1</damageFactor>
+				<useStackCountAsFactor>true</useStackCountAsFactor>
+			</li>
+			<li Class="CompProperties_Dissolution">
+				<dissolutionAfterDays>24</dissolutionAfterDays>
+				<dissolutinFactorIndoors>0.001</dissolutinFactorIndoors>
+				<dissolutionFactorRain>2</dissolutionFactorRain>
+			</li>
+			<li Class="CompProperties_DissolutionEffectPollution">
+				<cellsToPollutePerDissolution>1</cellsToPollutePerDissolution>
+				<tilePollutionPerDissolution>0.0005</tilePollutionPerDissolution>
+				<waterTilePollutionFactor>8</waterTilePollutionFactor>
+			</li>
+		</comps>
+		<extraDamages>
+			<li>
+				<def>ToxGas</def>
+				<amount>0</amount>
+				<armorPenetration>0</armorPenetration>
+				<chance>1</chance>
+			</li>
+		</extraDamages>
+	</VAR.AmmoDefSecondary>-->
+
+
+	<!--Damage Defs-->
+	<DamageDef ParentName="Arrow">
+		<defName>ArrowToxic</defName>
+		<label>Toxic Arrow</label>
+		<additionalHediffs>
+			<li>
+				<hediff>ToxicBuildup</hediff>
+				<severityPerDamageDealt>0.0065</severityPerDamageDealt>
+				<victimSeverityScaling>ToxicResistance</victimSeverityScaling>
+				<inverseStatScaling>true</inverseStatScaling>
+				<victimSeverityScalingByInvBodySize>true</victimSeverityScalingByInvBodySize>
+			</li>
+		</additionalHediffs>
+		<applyAdditionalHediffsIfHuntingForFood>false</applyAdditionalHediffsIfHuntingForFood>
+	</DamageDef>
+	
+	<DamageDef ParentName="Bullet">
+		<defName>BulletCryo</defName>
+		<label>Cryo Bullet</label>
+		<additionalHediffs>
+			<li>
+				<hediff>Hypothermia</hediff>
+				<severityPerDamageDealt>0.0065</severityPerDamageDealt>
+				<victimSeverityScaling>ArmorRating_Heat</victimSeverityScaling>
+				<inverseStatScaling>true</inverseStatScaling>
+				<victimSeverityScalingByInvBodySize>true</victimSeverityScalingByInvBodySize>
+			</li>
+		</additionalHediffs>
+		<applyAdditionalHediffsIfHuntingForFood>true</applyAdditionalHediffsIfHuntingForFood>
+		<impactSoundType>Bullet</impactSoundType>
+	</DamageDef>
+
+	<DamageDef ParentName="Arrow">
+		<defName>ArrowCryo</defName>
+		<label>Cryo Arrow</label>
+		<additionalHediffs>
+			<li>
+				<hediff>Hypothermia</hediff>
+				<severityPerDamageDealt>0.0065</severityPerDamageDealt>
+				<victimSeverityScaling>ArmorRating_Heat</victimSeverityScaling>
+				<inverseStatScaling>true</inverseStatScaling>
+				<victimSeverityScalingByInvBodySize>true</victimSeverityScalingByInvBodySize>
+			</li>
+		</additionalHediffs>
+		<applyAdditionalHediffsIfHuntingForFood>true</applyAdditionalHediffsIfHuntingForFood>
+	</DamageDef>
+
+	<DamageDef ParentName="Flame">
+		<defName>AcidBurnVE</defName>
+		<label>acid burn</label>
+		<workerClass>DamageWorker_AddInjury</workerClass>
+		<hediff>AcidBurn</hediff>
+		<additionalHediffs>
+			<li MayRequire="OskarPotocki.VanillaFactionsExpanded.Core">
+				<hediff>VEF_AcidBuildup</hediff>
+				<severityPerDamageDealt>0.01</severityPerDamageDealt>
+				<victimSeverityScaling>ToxicResistance</victimSeverityScaling>
+				<inverseStatScaling>true</inverseStatScaling>
+			</li>
+		</additionalHediffs>
+	</DamageDef>
+	
+	<DamageDef ParentName="Flame">
+		<defName>ShockBurn</defName>
+		<label>electric burn</label>
+		<workerClass>DamageWorker_AddInjury</workerClass>
+		<hediff>ElectricBurn</hediff>
+	</DamageDef>
+
+	<HediffDef ParentName="BurnBase">
+		<defName>ElectricBurn</defName>
+		<label>electrical burn</label>
+		<labelNoun>an electrical burn</labelNoun>
+		<description>A electrical burn.</description>
+		<comps>
+			<li Class="HediffCompProperties_GetsPermanent">
+				<permanentLabel>electric burn scar</permanentLabel>
+			</li>
+		</comps>
+		<injuryProps>
+			<destroyedLabel>Burned off (electrical)</destroyedLabel>
+			<destroyedOutLabel>Burned out (electrical)</destroyedOutLabel>
+		</injuryProps>
+	</HediffDef>
+
+</Defs>
