@@ -35,9 +35,10 @@ namespace VAR
 		public List<ResearchProjectDef> researchPrerequisites = new List<ResearchProjectDef>();
 		public Color color;
 		public List<CompProperties> comps = new List<CompProperties>();
+		public float projectileCount = 1f;
 	}
 	public class AmmoDefTemplate : Def
-    {
+	{
 		public List<StatModifier> statBases = new List<StatModifier>();
 		public List<ThingDefCountClass> costList = new List<ThingDefCountClass>();
 		public StyleCategoryDef dominantStyleCategory;
@@ -55,7 +56,7 @@ namespace VAR
 		public int uiIconForStackCount = -1;
 		//public Type thingClass;
 		public ThingCategory category = ThingCategory.Item;
-		public TickerType tickerType= TickerType.Never;
+		public TickerType tickerType = TickerType.Never;
 		public int stackLimit = 1;
 		public IntVec2 size = new IntVec2(1, 1);
 		public bool destroyable = true;
@@ -64,58 +65,58 @@ namespace VAR
 		public bool useHitPoints = true;
 		public List<CompProperties> comps = new List<CompProperties>();
 		[NoTranslate]
-        public string devNote;
+		public string devNote;
 		public List<ThingDefCountClass> smeltProducts;
-        public bool smeltable;
-        public bool burnableByRecipe;
-        public bool randomizeRotationOnSpawn;
+		public bool smeltable;
+		public bool burnableByRecipe;
+		public bool randomizeRotationOnSpawn;
 		public List<DamageMultiplier> damageMultipliers = new List<DamageMultiplier>();
-        public RecipeMakerProperties recipeMaker = new RecipeMakerProperties();
-        public bool forceDebugSpawnable;
-        public bool intricate;
-        public bool scatterableOnMapGen = true;
-        public float generateCommonality = 1f;
-        public float generateAllowChance = 1f;
-        public FloatRange startingHpRange = FloatRange.One;
+		public RecipeMakerProperties recipeMaker = new RecipeMakerProperties();
+		public bool forceDebugSpawnable;
+		public bool intricate;
+		public bool scatterableOnMapGen = true;
+		public float generateCommonality = 1f;
+		public float generateAllowChance = 1f;
+		public FloatRange startingHpRange = FloatRange.One;
 		[NoTranslate]
 		public List<string> thingSetMakerTags = new List<string>();
 		public List<RecipeDef> recipes = new List<RecipeDef>();
-        public bool messageOnDeteriorateInStorage = true;
-        public bool deteriorateFromEnvironmentalEffects = true;
-        public bool canDeteriorateUnspawned;
-        public bool canLoadIntoCaravan = true;
-        public FloatRange displayNumbersBetweenSameDefDistRange = FloatRange.Zero;
-        public int minRewardCount = 1;
-        public bool preventSkyfallersLandingOn;
-        public FactionDef requiresFactionToAcquire;
-        public OrderedTakeGroupDef orderedTakeGroup;
-        public int allowedArchonexusCount;
-        public int possessionCount;
-        public bool notifyMapRemoved;
-        public bool canScatterOver = true;
-        public GraphicData graphicData;
+		public bool messageOnDeteriorateInStorage = true;
+		public bool deteriorateFromEnvironmentalEffects = true;
+		public bool canDeteriorateUnspawned;
+		public bool canLoadIntoCaravan = true;
+		public FloatRange displayNumbersBetweenSameDefDistRange = FloatRange.Zero;
+		public int minRewardCount = 1;
+		public bool preventSkyfallersLandingOn;
+		public FactionDef requiresFactionToAcquire;
+		public OrderedTakeGroupDef orderedTakeGroup;
+		public int allowedArchonexusCount;
+		public int possessionCount;
+		public bool notifyMapRemoved;
+		public bool canScatterOver = true;
+		public GraphicData graphicData;
 		public DrawerType drawerType = DrawerType.MapMeshOnly;
-        public float hideAtSnowDepth = 99999f;
+		public float hideAtSnowDepth = 99999f;
 		public List<ThingStyleChance> randomStyle = new List<ThingStyleChance>();
-        public float randomStyleChance;
-        public bool canEditAnyStyle;
-        public bool selectable=true;
-        public bool neverMultiSelect;
-        public bool hasTooltip;
-        public bool seeThroughFog;
-        public bool drawGUIOverlay=true;
-        public bool drawGUIOverlayQuality = true;
-        public ResourceCountPriority resourceReadoutPriority = ResourceCountPriority.Middle;
-        public bool resourceReadoutAlwaysShow;
-        public ConceptDef storedConceptLearnOpportunity;
-        public float uiIconScale = 1f;
-        public bool hasCustomRectForSelector;
-        public bool alwaysHaulable=true;
-        public bool designateHaulable;
+		public float randomStyleChance;
+		public bool canEditAnyStyle;
+		public bool selectable = true;
+		public bool neverMultiSelect;
+		public bool hasTooltip;
+		public bool seeThroughFog;
+		public bool drawGUIOverlay = true;
+		public bool drawGUIOverlayQuality = true;
+		public ResourceCountPriority resourceReadoutPriority = ResourceCountPriority.Middle;
+		public bool resourceReadoutAlwaysShow;
+		public ConceptDef storedConceptLearnOpportunity;
+		public float uiIconScale = 1f;
+		public bool hasCustomRectForSelector;
+		public bool alwaysHaulable = true;
+		public bool designateHaulable;
 		public List<ThingCategoryDef> thingCategories = new List<ThingCategoryDef>();
 		public bool socialPropernessMatters;
-        public bool stealable = true;
-        public SoundDef soundDrop;
+		public bool stealable = true;
+		public SoundDef soundDrop;
 		public SoundDef soundPickup;
 		public SoundDef soundInteract;
 		public SoundDef soundImpactDefault;
@@ -129,25 +130,30 @@ namespace VAR
 		public bool healthAffectsPrice = true;
 		public TechLevel techLevel;
 		public List<string> weaponTags = new List<string>();
-        public bool destroyOnDrop;
-        public SoundDef meleeHitSound;
-        public IngestibleProperties ingestible;
+		public bool destroyOnDrop;
+		public SoundDef meleeHitSound;
+		public IngestibleProperties ingestible;
+		public GraphicData projectileGraphicData;
+		public float projectileCount = 1f;
+		public float DamageMultiplier = 1f;
+		public float APMultiplier = 1f;
 	}
     public class AmmoDefPrimary : AmmoDefBase
     {
-		public float DamageMultiplier;
-		public float APMultiplier;
+		public float DamageMultiplier = 1;
+		public float APMultiplier = 1;
 	}
 	public class AmmoDefSecondary : AmmoDefBase
 	{
-		public float DamageMultiplier;
-		public float APMultiplier;
+		public float DamageMultiplier = 1;
+		public float APMultiplier = 1;
 		public DamageDef NeolithicDamageDef;
 		public DamageDef MedievalDamageDef;
 		public DamageDef IndustrialDamageDef;
 		public DamageDef SpacerDamageDef;
 		public DamageDef UltratechDamageDef;
 		public DamageDef ArchotechDamageDef;
+		public List<DamageDefAdditionalHediff> additionalHediffs= new List<DamageDefAdditionalHediff>();
 		public List<ExtraDamage> extraDamages = new List<ExtraDamage>();
 	}
 	public static class AmmoDefGenerator
@@ -211,11 +217,14 @@ namespace VAR
 						CompProperties_CustomProjectile comp = new CompProperties_CustomProjectile
 						{
 							compClass = typeof(CompCustomProjectile),
-							damageMultiplier = primary.DamageMultiplier*secondary.DamageMultiplier,
-							apMultiplier = primary.APMultiplier*secondary.APMultiplier,
+							damageMultiplier = allDef.DamageMultiplier * primary.DamageMultiplier * secondary.DamageMultiplier,
+							apMultiplier = allDef.APMultiplier * primary.APMultiplier * secondary.APMultiplier,
+							additionalHediffs = secondary.additionalHediffs,
+							projectileGraphicData = allDef.projectileGraphicData,
+							projectileCount = (int)(allDef.projectileCount * primary.projectileCount * secondary.projectileCount),
 							extraDamages = secondary.extraDamages,
 						};
-						thingDef.description += "\n\nDamage Multiplier: " + (primary.DamageMultiplier * secondary.DamageMultiplier).ToString() + "\nArmor Piercing Multiplier: " + (primary.APMultiplier * secondary.APMultiplier).ToString();
+						thingDef.description += "\n\nDamage Multiplier: " + (allDef.DamageMultiplier * primary.DamageMultiplier * secondary.DamageMultiplier).ToString() + "\nArmor Piercing Multiplier: " + (allDef.APMultiplier * primary.APMultiplier * secondary.APMultiplier).ToString() + "\nProjectile Count: " + (allDef.projectileCount * primary.projectileCount * secondary.projectileCount).ToString();
 						switch (thingDef.techLevel)
 						{
 							case TechLevel.Neolithic:

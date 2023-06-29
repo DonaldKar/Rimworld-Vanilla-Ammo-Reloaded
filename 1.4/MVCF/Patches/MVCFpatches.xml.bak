@@ -61,7 +61,7 @@
 					</value>
 				</li>
 				<li Class="PatchOperationAdd">
-					<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]or not(weaponTags)][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]]/comps/li/verbProps[not((li/comps/li/compClass=VAR.MVCF.VerbComp_Reloadable_CustomAmmo)or(li/comps/li/compClass=MVCF.Reloading.Comps.VerbComp_Reloadable)or(li/comps/li/compClass=MVCF.Reloading.Comps.VerbComp_Reloadable_ChangeableAmmo))]</xpath>
+					<xpath>Defs/ThingDef[graphicData/texPath[not(contains(text(),"Building"))] or not(graphicData)][weaponTags[not(contains(text(),'Turret')) and not(contains(text(),'Artillery'))]or not(weaponTags)][verbs/li[defaultProjectile][verbClass="Verb_Shoot" or verbClass="Verb_LaunchProjectile"]]/comps/li/verbProps</xpath>
 					<value>
 						<li>
 							<label>CustomVARAmmo</label>

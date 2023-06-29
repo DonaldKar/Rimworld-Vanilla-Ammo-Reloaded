@@ -64,20 +64,7 @@ namespace VAR.LTS
 	[HarmonyPatch(typeof(ProjectileCompCombiner), "assignComp")]
 	public static class AmmoComp_LTS_Patch
     {
-		public static Type AmmoLogicType = AccessTools.TypeByName("Ammunition.Logic.AmmoLogic");
-
-		public static MethodInfo ammocheckMethod = AccessTools.Method(AmmoLogicType, "AmmoCheck");
-
-		public static class ammoDel
-        {
-			public delegate bool ammocheckDel(Pawn pawn, Thing weapon, out KitComponent kitComp, bool consumeAmmo);
-
-			public static readonly ammocheckDel ammocheckDelegate =
-				AccessTools.MethodDelegate<ammocheckDel>(ammocheckMethod);
-
-		}
-
-		public static void Postfix(ref Projectile __result, Verb_LaunchProjectile verb)
+		public static void Postfix(ref Projectile __result, Verb_LaunchProjectile verb, ref ShootLine resultingLine, bool canHitNonTargetPawnsNow, bool preventFriendlyFire)
         {
 			if (ammoDel.ammocheckDelegate(verb.CasterPawn, verb.EquipmentSource, out KitComponent comp, false))
 			{
@@ -91,9 +78,22 @@ namespace VAR.LTS
                     {
 						__result.GetComp<CompCustomProjectile>()?.assignProps(props);
 						//Log.Message("got comp");
+						ProjectileCompCombiner.fireextraprojectiles(__result, verb, ref resultingLine, canHitNonTargetPawnsNow, preventFriendlyFire);
 					}
 				}
 			}
+		}
+		public static Type AmmoLogicType = AccessTools.TypeByName("Ammunition.Logic.AmmoLogic");
+
+		public static MethodInfo ammocheckMethod = AccessTools.Method(AmmoLogicType, "AmmoCheck");
+
+		public static class ammoDel
+        {
+			public delegate bool ammocheckDel(Pawn pawn, Thing weapon, out KitComponent kitComp, bool consumeAmmo);
+
+			public static readonly ammocheckDel ammocheckDelegate =
+				AccessTools.MethodDelegate<ammocheckDel>(ammocheckMethod);
+
 		}
     }
 	//[HarmonyPatch(AmmoComp_LTS_Patch.ammocheckMethod,"AmmoCheck")]

@@ -23,7 +23,7 @@ namespace VAR
         public static bool LTSAutoPatch;
         static VAR()
         {
-            Harmony.DEBUG = true;
+            //Harmony.DEBUG = true;
             new Harmony("VAR.Mod").PatchAll();
             SetXmlSettings();
             ApplySettings();
@@ -50,8 +50,9 @@ namespace VAR
         public VanillaAmmoMod(ModContentPack pack) : base(pack)
         {
             
+            //Harmony.DEBUG = true;
+
             Harmony harmony = new Harmony(id: "VAR.Mod");
-            
             harmony.Patch(AccessTools.Method(typeof(DefGenerator), "GenerateImpliedDefs_PreResolve"),
                 prefix: new HarmonyMethod(typeof(DefGenerator_GenerateImpliedDefs_PreResolve_Patch), "Prefix"));
             
@@ -78,16 +79,16 @@ namespace VAR
         
         public bool needAmmo = false;
         
-        public bool MVCFAutoPatch = true;
-        public bool LTSAuto = true;
+        public bool MVCFAutoPatch = false;
+        public bool LTSAuto = false;
            
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref needAmmo, "needAmmo", false);
             
-            Scribe_Values.Look(ref MVCFAutoPatch, "MVCFAutoPatch", true);
-            Scribe_Values.Look(ref LTSAuto, "LTSAuto", true);
+            Scribe_Values.Look(ref MVCFAutoPatch, "MVCFAutoPatch", false);
+            Scribe_Values.Look(ref LTSAuto, "LTSAuto", false);
         }
         public enum Tabs
         {
@@ -155,6 +156,19 @@ namespace VAR
         }
     }
 
+    [HarmonyPatch(typeof(Projectile),"DrawMat", MethodType.Getter)]
+    public static class Projectile_DrawMat_Patch
+    {
+        public static void Postfix(ref Material __result, Projectile __instance)
+        {
+            CompCustomProjectile comp = __instance.TryGetComp<CompCustomProjectile>();
+            if (comp != null && comp.projectileGraphicData?.Graphic?.MatSingle != null)
+            {
+                __result = comp.projectileGraphicData.Graphic.MatSingle;
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
     public static class Projectile_DamageAmount_Patch
     {
@@ -166,33 +180,33 @@ namespace VAR
         }
     }
         
-        [HarmonyPatch(typeof(Projectile), "ArmorPenetration", MethodType.Getter)]
-        public static class Projectile_ArmorPenetration_Patch
+    [HarmonyPatch(typeof(Projectile), "ArmorPenetration", MethodType.Getter)]
+    public static class Projectile_ArmorPenetration_Patch
+    {
+        public static void Postfix(ref Projectile __instance, ref float __result)
         {
-            public static void Postfix(ref Projectile __instance, ref float __result)
-            {
-                __result *= __instance.GetComp<CompCustomProjectile>()?.apMultiplier ?? 1f;
-                return;
-            }
+            __result *= __instance.GetComp<CompCustomProjectile>()?.apMultiplier ?? 1f;
+            return;
         }
-        [HarmonyPatch(typeof(Projectile_Explosive), "Explode")]
-        public static class Projectile_Explosive_Explode_Patch
+    }
+    [HarmonyPatch(typeof(Projectile_Explosive), "Explode")]
+    public static class Projectile_Explosive_Explode_Patch
+    {
+        public static void Postfix(ref Projectile_Explosive __instance)
         {
-            public static void Postfix(ref Projectile_Explosive __instance)
+            ProjectileCompCombiner.extraDamagesExplosive(__instance);
+            if (__instance.def.projectile.extraDamages != null)
             {
-                ProjectileCompCombiner.extraDamagesExplosive(__instance);
-                if (__instance.def.projectile.extraDamages != null)
+                foreach (ExtraDamage extraDamage in __instance.def.projectile.extraDamages)
                 {
-                    foreach (ExtraDamage extraDamage in __instance.def.projectile.extraDamages)
+                    if (Rand.Chance(extraDamage.chance))
                     {
-                        if (Rand.Chance(extraDamage.chance))
-                        {
-                            GenExplosion.DoExplosion(__instance.Position, __instance.Map, __instance.def.projectile.explosionRadius, extraDamage.def, __instance.Launcher, (int)ProjectileCompCombiner.Damage(extraDamage.amount, __instance), ProjectileCompCombiner.ArmorP(extraDamage.AdjustedArmorPenetration(), __instance));
-                        }
+                        GenExplosion.DoExplosion(__instance.Position, __instance.Map, __instance.def.projectile.explosionRadius, extraDamage.def, __instance.Launcher, (int)ProjectileCompCombiner.Damage(extraDamage.amount, __instance), ProjectileCompCombiner.ArmorP(extraDamage.AdjustedArmorPenetration(), __instance));
                     }
                 }
             }
         }
+    }
         //public static CompProperties_CustomProjectile customProjectile;
         //[HarmonyPatch(typeof(Verb_LaunchProjectile), "Projectile", MethodType.Getter)]
         //public static class Verb_LaunchProjectile_Projectile_Patch
@@ -211,114 +225,122 @@ namespace VAR
         //        }
         //    }
         //}
-        [HarmonyPatch(typeof(Verb_LaunchProjectile), "TryCastShot")]
-        public static class Verb_LaunchProjectile_TryCastShot_Patch//loads comp into projectile
+    [HarmonyPatch(typeof(Verb_LaunchProjectile), "TryCastShot")]
+    public static class Verb_LaunchProjectile_TryCastShot_Patch//loads comp into projectile
+    {
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-            {
-                MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "assignComp");
+            MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "assignComp");
 
-                foreach (CodeInstruction instruction in instructions)
+            FieldInfo field1 = AccessTools.Field(typeof(Verb), "canHitNonTargetPawnsNow");
+            FieldInfo field2 = AccessTools.Field(typeof(Verb), "preventFriendlyFire");
+
+            foreach (CodeInstruction instruction in instructions)
+            {
+                if (instruction.opcode == OpCodes.Stloc_S && instruction.operand is LocalBuilder lb && lb.LocalIndex == 7)
                 {
-                    if (instruction.opcode == OpCodes.Stloc_S && instruction.operand is LocalBuilder lb && lb.LocalIndex == 7)
-                    {
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        yield return new CodeInstruction(OpCodes.Call, to);
-                        yield return instruction;
-                        continue;
-                    }
-                    else
-                    {
-                        yield return instruction;
-                    }
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldloca_S, 1);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, field1);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, field2);
+                    yield return new CodeInstruction(OpCodes.Call, to);
+                    yield return instruction;
+                    continue;
                 }
-            }
-        }
-        [HarmonyPatch]
-        public static class Projectile_DamageDef_Transpiler
-        {
-            static IEnumerable<MethodBase> TargetMethods()
-            {
-                yield return AccessTools.Method(typeof(Bullet), "Impact");
-                yield return AccessTools.Method(typeof(Projectile_Explosive), "Impact");
-                yield return AccessTools.Method(typeof(Projectile_Explosive), "Explode");
-            }
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-            {
-                FieldInfo from = AccessTools.Field(typeof(ProjectileProperties), "damageDef");
-                FieldInfo from2 = AccessTools.Field(typeof(ExtraDamage), "amount");
-                MethodBase from3 = AccessTools.Method(typeof(ExtraDamage), "AdjustedArmorPenetration");
-
-                MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "assignDef");
-                MethodBase to2 = AccessTools.Method(typeof(ProjectileCompCombiner), "Damage");
-                MethodBase to3 = AccessTools.Method(typeof(ProjectileCompCombiner), "ArmorP");
-
-                foreach (CodeInstruction instruction in instructions)
+                else
                 {
-                    if (instruction.operand as FieldInfo == from)
-                    {
-                        yield return instruction;
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
-                        yield return new CodeInstruction(OpCodes.Call, to);
-                        continue;
-                    }
-                    if (instruction.operand as FieldInfo == from2)
-                    {
-                        yield return instruction;
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
-                        yield return new CodeInstruction(OpCodes.Call, to2);
-                        continue;
-                    }
-                    if (instruction.operand as MethodBase == from3)
-                    {
-                        yield return instruction;
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
-                        yield return new CodeInstruction(OpCodes.Call, to3);
-                        continue;
-                    }
                     yield return instruction;
                 }
             }
         }
-        [HarmonyPatch(typeof(Bullet), "Impact")]
-        public static class Bullet_ExtraDamages_Transpiler
+    }
+    [HarmonyPatch]
+    public static class Projectile_DamageDef_Transpiler
+    {
+        static IEnumerable<MethodBase> TargetMethods()
         {
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-            {
-                MethodBase from = AccessTools.PropertyGetter(typeof(DamageWorker.DamageResult), "AssociateWithLog");
-                MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "extraDamagesBullet");
-                bool first = true;
+            yield return AccessTools.Method(typeof(Bullet), "Impact");
+            yield return AccessTools.Method(typeof(Projectile_Explosive), "Impact");
+            yield return AccessTools.Method(typeof(Projectile_Explosive), "Explode");
+        }
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo from = AccessTools.Field(typeof(ProjectileProperties), "damageDef");
+            FieldInfo from2 = AccessTools.Field(typeof(ExtraDamage), "amount");
+            MethodBase from3 = AccessTools.Method(typeof(ExtraDamage), "AdjustedArmorPenetration");
 
-                foreach (CodeInstruction instruction in instructions)
+            MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "assignDef");
+            MethodBase to2 = AccessTools.Method(typeof(ProjectileCompCombiner), "Damage");
+            MethodBase to3 = AccessTools.Method(typeof(ProjectileCompCombiner), "ArmorP");
+
+            foreach (CodeInstruction instruction in instructions)
+            {
+                if (instruction.operand as FieldInfo == from)
                 {
-                    if (instruction.operand as MethodBase == from && first)
-                    {
-                        first = false;
-                        yield return instruction;
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        yield return new CodeInstruction(OpCodes.Ldarg_1);
-                        yield return new CodeInstruction(OpCodes.Ldloc_2);
-                        yield return new CodeInstruction(OpCodes.Ldloc_3);
-                        yield return new CodeInstruction(OpCodes.Call, to);
-                        continue;
-                    }
                     yield return instruction;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
+                    yield return new CodeInstruction(OpCodes.Call, to);
+                    continue;
                 }
+                if (instruction.operand as FieldInfo == from2)
+                {
+                    yield return instruction;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
+                    yield return new CodeInstruction(OpCodes.Call, to2);
+                    continue;
+                }
+                if (instruction.operand as MethodBase == from3)
+                {
+                    yield return instruction;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    //yield return new CodeInstruction(OpCodes.Castclass, typeof(Projectile));
+                    yield return new CodeInstruction(OpCodes.Call, to3);
+                    continue;
+                }
+                yield return instruction;
             }
         }
-        public static class ProjectileCompCombiner
+    }
+    [HarmonyPatch(typeof(Bullet), "Impact")]
+    public static class Bullet_ExtraDamages_Transpiler
+    {
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            public static float Damage(float __result, Projectile __instance)
+            MethodBase from = AccessTools.PropertyGetter(typeof(DamageWorker.DamageResult), "AssociateWithLog");
+            MethodBase to = AccessTools.Method(typeof(ProjectileCompCombiner), "extraDamagesBullet");
+            bool first = true;
+            
+            foreach (CodeInstruction instruction in instructions)
             {
-                return __result * (__instance.GetComp<CompCustomProjectile>()?.damageMultiplier ?? 1f);
+                if (instruction.operand as MethodBase == from && first)
+                {
+                    first = false;
+                    yield return instruction;
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldarg_1);
+                    yield return new CodeInstruction(OpCodes.Ldloc_2);
+                    yield return new CodeInstruction(OpCodes.Ldloc_3);
+                    yield return new CodeInstruction(OpCodes.Call, to);
+                    continue;
+                }
+                yield return instruction;
             }
-            public static float ArmorP(float __result, Projectile __instance)
-            {
-                return __result * (__instance.GetComp<CompCustomProjectile>()?.apMultiplier ?? 1f);
-            }
+        }
+    }
+    public static class ProjectileCompCombiner
+    {
+        public static float Damage(float __result, Projectile __instance)
+        {
+            return __result * (__instance.GetComp<CompCustomProjectile>()?.damageMultiplier ?? 1f);
+        }
+        public static float ArmorP(float __result, Projectile __instance)
+        {
+            return __result * (__instance.GetComp<CompCustomProjectile>()?.apMultiplier ?? 1f);
+        }
             //public static Projectile assignComp(Projectile projectile, Verb_LaunchProjectile verb)
             //{
             //    CompProperties_CustomProjectile comp = AmmoComp(verb);
@@ -334,65 +356,203 @@ namespace VAR
 
             //    return projectile;
             //}
-            public static Projectile assignComp(Projectile projectile, Verb_LaunchProjectile verb)
-            {
+        public static Projectile assignComp(Projectile projectile, Verb_LaunchProjectile verb, ref ShootLine resultingLine, bool canHitNonTargetPawnsNow, bool preventFriendlyFire)
+        {
             Log.Message("assigning comp");
-                return projectile;
-            }
-            //public static CompProperties_CustomProjectile AmmoComp(Verb_LaunchProjectile verb)
-            //{
-            //    //VerbComp_Reloadable_ChangeableAmmo_Infinite comp = verb.Managed().TryGetComp<VerbComp_Reloadable_ChangeableAmmo_Infinite>();
-            //    //if (comp != null && comp.Projectile != null)
-            //    //{
-            //    //    CompProperties_CustomProjectile temp = comp.Projectile;
-            //    //    comp.Projectile = null;
-            //    //    return temp;
-            //    //}
-            //    return null;
-            //}
-            public static DamageDef assignDef(DamageDef damageDef, Projectile projectile)
+            return projectile;
+        }
+        //public static CompProperties_CustomProjectile AmmoComp(Verb_LaunchProjectile verb)
+        //{
+        //    //VerbComp_Reloadable_ChangeableAmmo_Infinite comp = verb.Managed().TryGetComp<VerbComp_Reloadable_ChangeableAmmo_Infinite>();
+        //    //if (comp != null && comp.Projectile != null)
+        //    //{
+        //    //    CompProperties_CustomProjectile temp = comp.Projectile;
+        //    //    comp.Projectile = null;
+        //    //    return temp;
+        //    //}
+        //    return null;
+        //}
+
+        public static void fireextraprojectiles(Projectile projectile, Verb_LaunchProjectile verb, ref ShootLine resultingLine, bool canHitNonTargetPawnsNow, bool preventFriendlyFire)
+        {
+            //Log.Message("assigning comp");
+            CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
+            if (comp.projectileCount > 1)
             {
-                CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
-                if (comp != null && comp.damageDef != null)
+                Thing caster = verb.caster;
+                VerbProperties verbProps = verb.verbProps;
+                LocalTargetInfo currentTarget = verb.CurrentTarget;
+                Thing manningPawn = caster;
+                Thing equipmentSource = verb.EquipmentSource;
+                CompMannable compMannable = caster.TryGetComp<CompMannable>();
+                if (compMannable != null && compMannable.ManningPawn != null)
                 {
-                    return comp.damageDef;
+                    manningPawn = compMannable.ManningPawn;
+                    equipmentSource = caster;
                 }
-                return damageDef;
-            }
-            public static void extraDamagesBullet(Bullet projectile, Thing hitThing, BattleLogEntry_RangedImpact battleLogEntry_RangedImpact, bool instigatorGuilty)
-            {
-                if (hitThing == null)
+                for (int i = 1; i < comp.projectileCount; i++)
                 {
-                    return;
-                }
-                CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
-                if (comp != null)
-                {
-                    foreach (ExtraDamage extraDamage in comp.extraDamages)
+                    Projectile projectile2 = (Projectile)GenSpawn.Spawn(projectile.def, resultingLine.Source, caster.Map);
+                    CompCustomProjectile comp2 = projectile2.GetComp<CompCustomProjectile>();
+                    comp2.assignComps(comp);
+                    if (verbProps.ForcedMissRadius > 0.5f)
                     {
-                        if (Rand.Chance(extraDamage.chance))
+                        float num = verbProps.ForcedMissRadius;
+                        if (manningPawn != null && manningPawn is Pawn pawn)
                         {
-                            DamageInfo dinfo2 = new DamageInfo(extraDamage.def, Damage(extraDamage.amount, projectile), ArmorP(extraDamage.AdjustedArmorPenetration(), projectile), projectile.ExactRotation.eulerAngles.y, projectile.Launcher, null, projectile.EquipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, projectile.intendedTarget.Thing, instigatorGuilty);
-                            hitThing.TakeDamage(dinfo2).AssociateWithLog(battleLogEntry_RangedImpact);
+                            num *= verbProps.GetForceMissFactorFor(equipmentSource, pawn);
+                        }
+                        float num2 = VerbUtility.CalculateAdjustedForcedMiss(num, currentTarget.Cell - caster.Position);
+                        if (num2 > 0.5f)
+                        {
+                            IntVec3 forcedMissTarget = verb.GetForcedMissTarget(num2);
+                            if (forcedMissTarget != currentTarget.Cell)
+                            {
+                                verb.ThrowDebugText("ToRadius");
+                                verb.ThrowDebugText("Rad\nDest", forcedMissTarget);
+                                ProjectileHitFlags projectileHitFlags = ProjectileHitFlags.NonTargetWorld;
+                                if (Rand.Chance(0.5f))
+                                {
+                                    projectileHitFlags = ProjectileHitFlags.All;
+                                }
+                                if (!canHitNonTargetPawnsNow)
+                                {
+                                    projectileHitFlags &= ~ProjectileHitFlags.NonTargetPawns;
+                                }
+                                projectile2.Launch(manningPawn, caster.DrawPos, forcedMissTarget, currentTarget, projectileHitFlags, preventFriendlyFire, equipmentSource);
+                                continue;
+                            }
                         }
                     }
-                }
-            }
-            public static void extraDamagesExplosive(Projectile_Explosive projectile)
-            {
-                CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
-                if (comp != null)
-                {
-                    foreach (ExtraDamage extraDamage in comp.extraDamages)
+                    ShotReport shotReport = ShotReport.HitReportFor(caster, verb, currentTarget);
+                    Thing randomCoverToMissInto = shotReport.GetRandomCoverToMissInto();
+                    ThingDef targetCoverDef = randomCoverToMissInto?.def;
+                    if (verbProps.canGoWild && !Rand.Chance(shotReport.AimOnTargetChance_IgnoringPosture))
                     {
-                        if (Rand.Chance(extraDamage.chance))
+                        resultingLine.ChangeDestToMissWild(shotReport.AimOnTargetChance_StandardTarget);
+                        verb.ThrowDebugText("ToWild" + (canHitNonTargetPawnsNow ? "\nchntp" : ""));
+                        verb.ThrowDebugText("Wild\nDest", resultingLine.Dest);
+                        ProjectileHitFlags projectileHitFlags2 = ProjectileHitFlags.NonTargetWorld;
+                        if (Rand.Chance(0.5f) && canHitNonTargetPawnsNow)
                         {
-                            GenExplosion.DoExplosion(projectile.Position, projectile.Map, projectile.def.projectile.explosionRadius, extraDamage.def, projectile.Launcher, (int)Damage(extraDamage.amount, projectile), ArmorP(extraDamage.AdjustedArmorPenetration(), projectile));
+                            projectileHitFlags2 |= ProjectileHitFlags.NonTargetPawns;
                         }
+                        projectile2.Launch(manningPawn, caster.DrawPos, resultingLine.Dest, currentTarget, projectileHitFlags2, preventFriendlyFire, equipmentSource, targetCoverDef);
+                        continue;
+                    }
+                    if (currentTarget.Thing != null && currentTarget.Thing.def.CanBenefitFromCover && !Rand.Chance(shotReport.PassCoverChance))
+                    {
+                        verb.ThrowDebugText("ToCover" + (canHitNonTargetPawnsNow ? "\nchntp" : ""));
+                        verb.ThrowDebugText("Cover\nDest", randomCoverToMissInto.Position);
+                        ProjectileHitFlags projectileHitFlags3 = ProjectileHitFlags.NonTargetWorld;
+                        if (canHitNonTargetPawnsNow)
+                        {
+                            projectileHitFlags3 |= ProjectileHitFlags.NonTargetPawns;
+                        }
+                        projectile2.Launch(manningPawn, caster.DrawPos, randomCoverToMissInto, currentTarget, projectileHitFlags3, preventFriendlyFire, equipmentSource, targetCoverDef);
+                        continue;
+                    }
+                    ProjectileHitFlags projectileHitFlags4 = ProjectileHitFlags.IntendedTarget;
+                    if (canHitNonTargetPawnsNow)
+                    {
+                        projectileHitFlags4 |= ProjectileHitFlags.NonTargetPawns;
+                    }
+                    if (!currentTarget.HasThing || currentTarget.Thing.def.Fillage == FillCategory.Full)
+                    {
+                        projectileHitFlags4 |= ProjectileHitFlags.NonTargetWorld;
+                    }
+                    verb.ThrowDebugText("ToHit" + (canHitNonTargetPawnsNow ? "\nchntp" : ""));
+                    if (currentTarget.Thing != null)
+                    {
+                        projectile2.Launch(manningPawn, caster.DrawPos, currentTarget, currentTarget, projectileHitFlags4, preventFriendlyFire, equipmentSource, targetCoverDef);
+                        verb.ThrowDebugText("Hit\nDest", currentTarget.Cell);
+                        continue;
+                    }
+                    else
+                    {
+                        projectile2.Launch(manningPawn, caster.DrawPos, resultingLine.Dest, currentTarget, projectileHitFlags4, preventFriendlyFire, equipmentSource, targetCoverDef);
+                        verb.ThrowDebugText("Hit\nDest", resultingLine.Dest);
+                        continue;
                     }
                 }
             }
         }
+        public static void ThrowDebugText(this Verb verb, string text)
+        {
+            if (DebugViewSettings.drawShooting)
+            {
+                MoteMaker.ThrowText(verb.caster.DrawPos, verb.caster.Map, text);
+            }
+        }
+        public static void ThrowDebugText(this Verb verb, string text, IntVec3 c)
+        {
+            if (DebugViewSettings.drawShooting)
+            {
+                MoteMaker.ThrowText(c.ToVector3Shifted(), verb.caster.Map, text);
+            }
+        }
+        public static IntVec3 GetForcedMissTarget(this Verb verb,float forcedMissRadius)
+        {
+            //if (verb.verbProps.forcedMissEvenDispersal)
+            //{
+            //    if (forcedMissTargetEvenDispersalCache.Count <= 0)
+            //    {
+            //        forcedMissTargetEvenDispersalCache.AddRange(GenerateEvenDispersalForcedMissTargets(currentTarget.Cell, forcedMissRadius, burstShotsLeft));
+            //        forcedMissTargetEvenDispersalCache.SortByDescending((IntVec3 p) => p.DistanceToSquared(Caster.Position));
+            //    }
+            //    if (forcedMissTargetEvenDispersalCache.Count > 0)
+            //    {
+            //        return forcedMissTargetEvenDispersalCache.Pop();
+            //    }
+            //}
+            int max = GenRadial.NumCellsInRadius(forcedMissRadius);
+            int num = Rand.Range(0, max);
+            return verb.CurrentTarget.Cell + GenRadial.RadialPattern[num];
+        }
+
+        public static DamageDef assignDef(DamageDef damageDef, Projectile projectile)
+        {
+            CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
+            if (comp != null && comp.damageDef != null)
+            {
+                return comp.damageDef;
+            }
+            return damageDef;
+        }
+        public static void extraDamagesBullet(Bullet projectile, Thing hitThing, BattleLogEntry_RangedImpact battleLogEntry_RangedImpact, bool instigatorGuilty)
+        {
+            if (hitThing == null)
+            {
+                return;
+            }
+            CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
+            if (comp != null)
+            {
+                foreach (ExtraDamage extraDamage in comp.extraDamages)
+                {
+                    if (Rand.Chance(extraDamage.chance))
+                    {
+                        DamageInfo dinfo2 = new DamageInfo(extraDamage.def, Damage(extraDamage.amount, projectile), ArmorP(extraDamage.AdjustedArmorPenetration(), projectile), projectile.ExactRotation.eulerAngles.y, projectile.Launcher, null, projectile.EquipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, projectile.intendedTarget.Thing, instigatorGuilty);
+                        hitThing.TakeDamage(dinfo2).AssociateWithLog(battleLogEntry_RangedImpact);
+                    }
+                }
+            }
+        }
+        public static void extraDamagesExplosive(Projectile_Explosive projectile)
+        {
+            CompCustomProjectile comp = projectile.GetComp<CompCustomProjectile>();
+            if (comp != null)
+            {
+                foreach (ExtraDamage extraDamage in comp.extraDamages)
+                {
+                    if (Rand.Chance(extraDamage.chance))
+                    {
+                        GenExplosion.DoExplosion(projectile.Position, projectile.Map, projectile.def.projectile.explosionRadius, extraDamage.def, projectile.Launcher, (int)Damage(extraDamage.amount, projectile), ArmorP(extraDamage.AdjustedArmorPenetration(), projectile));
+                    }
+                }
+            }
+        }
+    }
     public class CompProperties_CustomProjectile: CompProperties
     {
         public CompProperties_CustomProjectile()
@@ -404,9 +564,15 @@ namespace VAR
         public float apMultiplier = 1f;
         //secondaries
         //adds extra damages, emp, burns, shocks, extinguish, flame, toxgas, etc
-        public List<ExtraDamage> extraDamages;
+        public List<ExtraDamage> extraDamages = new List<ExtraDamage>();
         //replaces damage def, ex. bullet toxic, hediff appliers which need/scale with damage values
         public DamageDef damageDef;
+
+        public int projectileCount = 1;
+
+        public GraphicData projectileGraphicData;
+
+        public List<DamageDefAdditionalHediff> additionalHediffs = new List<DamageDefAdditionalHediff>();
     }
     //public class CustomProjectileHolder
     //{
@@ -436,8 +602,25 @@ namespace VAR
         public List<ExtraDamage> extraDamages = new List<ExtraDamage>();
 
         public DamageDef damageDef;
-        public CompProperties_CustomProjectile Props => (CompProperties_CustomProjectile)props;
 
+        public int projectileCount;
+
+        public GraphicData projectileGraphicData;
+
+        public List<DamageDefAdditionalHediff> additionalHediffs;
+        public CompProperties_CustomProjectile Props => (CompProperties_CustomProjectile)props;
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref damageMultiplier, "damageMultiplier", 1f);
+            Scribe_Values.Look(ref apMultiplier, "apMultiplier", 1f);
+            Scribe_Values.Look(ref damageMultiplier, "damageMultiplier", 1f);
+            Scribe_Values.Look(ref damageDef, "damageDef");
+            Scribe_Collections.Look(ref extraDamages, "extraDamages", LookMode.Deep);
+            Scribe_Values.Look(ref projectileCount, "projectileCount", 1);
+            Scribe_Deep.Look(ref projectileGraphicData, "projectileGraphicData");
+            Scribe_Collections.Look(ref additionalHediffs, "additionalHediffs", LookMode.Deep);
+        }
         public void assignProps(CompProperties_CustomProjectile customProjectile)
         {
             damageMultiplier=customProjectile.damageMultiplier;
@@ -446,6 +629,21 @@ namespace VAR
             apMultiplier=customProjectile.apMultiplier;
             extraDamages=customProjectile.extraDamages;
             damageDef=customProjectile.damageDef;
+            projectileCount=customProjectile.projectileCount;
+            projectileGraphicData=customProjectile.projectileGraphicData;
+            additionalHediffs=customProjectile.additionalHediffs;
+        }
+        public void assignComps(CompCustomProjectile customProjectile)
+        {
+            damageMultiplier = customProjectile.damageMultiplier;
+            Log.Message(damageMultiplier.ToString());
+            Log.Message(customProjectile.damageMultiplier.ToString());
+            apMultiplier = customProjectile.apMultiplier;
+            extraDamages = customProjectile.extraDamages;
+            damageDef = customProjectile.damageDef;
+            projectileCount = customProjectile.projectileCount;
+            projectileGraphicData = customProjectile.projectileGraphicData;
+            additionalHediffs = customProjectile.additionalHediffs;
         }
     }
 }

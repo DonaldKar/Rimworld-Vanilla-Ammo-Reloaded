@@ -44,6 +44,88 @@
 		<parent>Ammunition</parent>
 	</ThingCategoryDef>
 	
+	<!--shotgun ammo test-->
+	<!--<ThingDef>
+		<thingClass>ThingWithComps</thingClass>
+		<defName>shotgun_ammo</defName>
+		<label>shotgun Ammo</label>
+		<description>Cased Ammunition, Rockets, and Grenades that are compatible with Industrial Tech weapons. Explodes when damaged.</description>
+		<techLevel>Industrial</techLevel>
+		<graphicData>
+			<texPath>IndustrialAmmo</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+			<shaderType>CutoutComplex</shaderType>
+		</graphicData>
+		<costList>
+			<Chemfuel>50</Chemfuel>
+		</costList>
+		<thingCategories>
+			<li>IndustrialAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>TableMachining</li>
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>Gunsmithing</researchPrerequisite>
+		</recipeMaker>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Bullet</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+			<li Class="VAR.CompProperties_CustomProjectile">
+				<damageMultiplier>0.125</damageMultiplier>
+                <projectileCount>8</projectileCount>
+				<projectileGraphicData>
+					<texPath>Things/Projectile/Bullet_Small</texPath>
+					<graphicClass>Graphic_Single</graphicClass>
+				</projectileGraphicData>
+			</li>
+			<li Class="CompProperties_Forbiddable"/>
+		</comps>
+		<category>Item</category>
+		<drawerType>MapMeshOnly</drawerType>
+		<resourceReadoutPriority>Middle</resourceReadoutPriority>
+		<useHitPoints>true</useHitPoints>
+		<selectable>true</selectable>
+		<altitudeLayer>Item</altitudeLayer>
+		<stackLimit>500</stackLimit>
+		<alwaysHaulable>true</alwaysHaulable>
+		<drawGUIOverlay>true</drawGUIOverlay>
+		<rotatable>false</rotatable>
+		<allowedArchonexusCount>-1</allowedArchonexusCount>
+		<soundInteract>Metal_Drop</soundInteract>
+		<soundDrop>Standard_Drop</soundDrop>
+		<tickerType>Normal</tickerType>
+		<statBases>
+			<Beauty>-4</Beauty>
+			<MaxHitPoints>60</MaxHitPoints>
+			<Mass>.1</Mass>
+			<Flammability>1.0</Flammability>
+			<DeteriorationRate>1.5</DeteriorationRate>
+		</statBases>
+		<possessionCount>60</possessionCount>
+	</ThingDef>-->
+	
 	<!--generic template base, nothing unique-->
 	<VAR.AmmoDefTemplate Abstract="true" Name="CustomBullet">
 		<category>Item</category>
@@ -71,6 +153,9 @@
 		<comps>
 			<li Class="CompProperties_Forbiddable"/>
 		</comps>
+		<modExtensions>
+            <li MayRequire="LimeTreeSnake.Ammunition" Class="Ammunition.DefModExtensions.AmmunitionExtension" />
+        </modExtensions>
 	</VAR.AmmoDefTemplate>
 	<!--tech level templates-->
 	<VAR.AmmoDefTemplate ParentName="CustomBullet">
@@ -108,9 +193,6 @@
 			</skillRequirements>
 			<displayPriority>100</displayPriority>
 		</recipeMaker>
-		<modExtensions>
-            <li MayRequire="LimeTreeSnake.Ammunition" Class="Ammunition.DefModExtensions.AmmunitionExtension" />
-        </modExtensions>
 	</VAR.AmmoDefTemplate>
 	
 	<VAR.AmmoDefTemplate ParentName="CustomBullet">
@@ -336,6 +418,62 @@
 		</recipeMaker>
 	</VAR.AmmoDefTemplate>-->
 	
+	<!--Buckshot industrial-->
+	<VAR.AmmoDefTemplate ParentName="CustomBullet">
+		<defName>buckshot_shotgun_ammo</defName>
+		<label>Buckshot Ammo</label>
+		<description>Buckshot Ammunition for Industrial Shotguns. Projecties split into 8 smaller projectiles after leaving the barrel.</description>
+		<techLevel>Industrial</techLevel>
+		<graphicData>
+			<texPath>IndustrialAmmo</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+			<shaderType>CutoutComplex</shaderType>
+		</graphicData>
+		<costList>
+			<Chemfuel>50</Chemfuel>
+		</costList>
+		<thingCategories>
+			<li>IndustrialAmmo</li>
+		</thingCategories>
+		<tradeTags>
+			<li>MortarShell</li>
+		</tradeTags>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<effectWorking>Cook</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<workAmount>800</workAmount>
+			<productCount>100</productCount>
+			<bulkRecipeCount>5</bulkRecipeCount>
+			<unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
+			<workSkill>Crafting</workSkill>
+			<recipeUsers>
+				<li>TableMachining</li>
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<skillRequirements>
+				<Crafting>4</Crafting>
+			</skillRequirements>
+			<displayPriority>100</displayPriority>
+			<researchPrerequisite>Gunsmithing</researchPrerequisite>
+		</recipeMaker>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.9</explosiveRadius>
+				<explosiveDamageType>Bullet</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.04</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.3</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+		</comps>
+		<DamageMultiplier>0.125</DamageMultiplier>
+        <projectileCount>8</projectileCount>
+		<projectileGraphicData>
+			<texPath>Things/Projectile/Bullet_Small</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</projectileGraphicData>
+	</VAR.AmmoDefTemplate>
+	
 	<!--primaries-->
 	
 	<VAR.AmmoDefPrimary>
@@ -449,7 +587,7 @@
 			</li>
 			<li>
 				<def>ShockBurn</def>
-				<amount>5</amount>
+				<amount>1</amount>
 				<armorPenetration>0</armorPenetration>
 				<chance>1</chance>
 			</li>
@@ -479,7 +617,7 @@
 		<extraDamages>
 			<li>
 				<def>Frostbite</def>
-				<amount>5</amount>
+				<amount>1</amount>
 				<armorPenetration>0</armorPenetration>
 				<chance>1</chance>
 			</li>
@@ -563,7 +701,7 @@
 		<extraDamages>
 			<li>
 				<def>AcidBurnVE</def>
-				<amount>10</amount>
+				<amount>5</amount>
 				<armorPenetration>0.5</armorPenetration>
 				<chance>1</chance>
 			</li>
